@@ -25,6 +25,7 @@ public class BJmobile {
 	public static double cityMaxLat;
 	public static double cityMinLon;
 	public static double cityMinLat;
+	public static int idLen;
 	
 	public static Map<String,String> basePos = new HashMap<String,String>();
 	public static BufferedWriter[] bws;
@@ -102,7 +103,7 @@ public class BJmobile {
 			afList = af.split(",");
 			if(afList.length<11)
 				continue;
-			int num = Integer.valueOf(afList[2].substring(17)).intValue();
+			int num = Integer.valueOf(afList[2].substring(idLen-2)).intValue();
 			int cellid = Integer.valueOf(afList[6]).intValue();
 			String lc = afList[5]+String.format("%05d", cellid);
 			//System.out.println(lc);
@@ -225,6 +226,7 @@ public class BJmobile {
 		cityMinLon = Double.valueOf(Config.getAttr(Config.CityMinLon));
 		cityMaxLat = Double.valueOf(Config.getAttr(Config.CityMaxLat));
 		cityMinLat = Double.valueOf(Config.getAttr(Config.CityMinLat));
+		idLen = Integer.valueOf(Config.getAttr(Config.IdLength));
 		
 		File rawPath = new File(Config.getAttr(Config.RawPath));
 		File[] rawFiles = rawPath.listFiles();
