@@ -105,7 +105,10 @@ public class BJmobile2014 {
 			afList = af.split(",");
 			if(afList.length<11)
 				continue;
-			int num = Integer.valueOf(afList[0].substring(idLen-2)).intValue();
+			if(afList[0].length()!=idLen)
+				continue;
+			int num = Math.abs(afList[0].hashCode())%100;
+			//System.out.println(afList[0]+"------："+num);
 			//int cellid = Integer.valueOf(afList[6]).intValue();
 			//String lc = afList[5]+String.format("%05d", cellid);
 			//System.out.println(lc);
