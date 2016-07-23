@@ -286,10 +286,10 @@ public class getStayRecord {
 		for(File file:goodRecordFiles){
 			importRawRecord(file);
 			calStayRecord();
-			stat();
-			//exportStayRecord(file.getName());
+			//stat();
+			exportStayRecord(file.getName());
 			//if(++j>=1)
-				break;
+			//	break;
 		}
 		System.out.println("finish");
 		
