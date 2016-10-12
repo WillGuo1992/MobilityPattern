@@ -269,11 +269,15 @@ public class getStayRecord {
 	public static void stat(){
 		for(StayRecord user:stayRecords){
 			int count = 0;
+			if(user.getStayPoints().size()<20 || user.getStayPoints().size()>50)
+				continue;
 			for(StayPoint point:user.getStayPoints()){
+				if((count==1 || count==2)&& point.getState()==1 && timeSpan(point.getSTime(),point.getETime())<120)
+					break;
 				if(point.getState()==1)
 					count+=1;
 			}
-			if(count==5)
+			if(count==4)
 				System.out.println(user.getId());
 		}
 	}
@@ -286,8 +290,8 @@ public class getStayRecord {
 		for(File file:goodRecordFiles){
 			importRawRecord(file);
 			calStayRecord();
-			//stat();
-			exportStayRecord(file.getName());
+			stat();
+			//exportStayRecord(file.getName());
 			//if(++j>=1)
 			//	break;
 		}

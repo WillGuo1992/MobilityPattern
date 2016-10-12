@@ -72,12 +72,12 @@ public class RoutesClustering {
 	public static void main(String[] args)throws Exception{
 		Config.init();
 		List<DataPoint> dpoints = new LinkedList<DataPoint>();
-		String ODRecordFileName = Config.getAttr(Config.ODRecordPath)+"\\moreThan40Out.txt";
-		String ODRoutesPathName = Config.getAttr(Config.ODRoutesPath)+"\\";
+		//String ODRecordFileName = Config.getAttr(Config.ODRecordPath)+"\\moreThan40Out.txt";
+		//String ODRoutesPathName = Config.getAttr(Config.ODRoutesPath)+"\\";
 		//File ODRecordFile = new File(ODRecordFileName);
-		File ODRecordFile = new File("F:\\Experiment\\s\\moreThan40Out.csv");
+		File ODRecordFile = new File("K:\\BJmobilePattern2014\\songjiazhuang_jinrongjie.txt");
 		//File ODRoutesPath = new File(ODRoutesPathName);
-		File ODRoutesPath = new File("F:\\Experiment\\routes\\");
+		File ODRoutesPath = new File("K:\\BJmobilePattern2014\\songjiazhuang_jinrongjie\\600");
 		
 		importStayRecord(ODRecordFile);
 		int k=0;
@@ -101,7 +101,7 @@ public class RoutesClustering {
 			return;
 		*/
 		ClusterAnalysis ca = new ClusterAnalysis();
-		List<Cluster> clusterList = ca.doDbscanAnalysis(dpoints, 800, 2);
+		List<Cluster> clusterList = ca.doDbscanAnalysis(dpoints, 1000, 2);
 		int nc = ca.displayCluster(clusterList);
 		System.out.println("Number of Cluster:"+nc);
 		exportODRoutes(clusterList,ODRoutesPath);

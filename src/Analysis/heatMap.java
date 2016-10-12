@@ -50,7 +50,7 @@ public class heatMap {
 		//设置输入文件夹路径
 		inputPath = "F:\\BJmobile\\20130226\\7stayRecord\\";
 		//设置输出文件路径
-		outputFile = "E:\\DataVisual\\amap\\heatMap\\heatmap_data_20130226_work.js";
+		outputFile = "E:\\DataVisual\\amap\\heatMap\\heatmap_data_20130226_relax.js";
 
 		String af;
 		File filePath = new File(inputPath);
@@ -73,7 +73,10 @@ public class heatMap {
 					//if(!(timeSpan(times[1],"080000")>0 || timeSpan(times[0],"200000")<0))
 					//	continue;
 					//工作地判断条件
-					if(timeSpan(times[0],"080000")>0 || timeSpan(times[1],"190000")<0 || timeSpan(times[0],times[1])<240)
+					//if(timeSpan(times[0],"080000")>0 || timeSpan(times[1],"190000")<0 || timeSpan(times[0],times[1])<240)
+					//	continue;
+					//休闲地判断条件
+					if(!(timeSpan(times[0],"170000")!=0 && timeSpan(times[0],times[1])<210))
 						continue;
 					double longitude = Double.valueOf(afList[3]).doubleValue();
 					double latitude = Double.valueOf(afList[4]).doubleValue();

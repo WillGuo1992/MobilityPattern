@@ -30,6 +30,7 @@ import Model.StayRecord;
  */
 
 public class ODSelection {
+	/*
 	//O-天通苑
 	public static final double OMaxLon = 116.442177;
 	public static final double OMinLon = 116.406162;
@@ -45,7 +46,126 @@ public class ODSelection {
 	public static final double RMinLon = 116.391873;
 	public static final double RMaxLat = 40.113943;
 	public static final double RMinLat = 39.893205;
+	*/
+	/*
+	//O-亚运村
+	public static final double OMaxLon = 116.416936;
+	public static final double OMinLon = 116.400242;
+	public static final double OMaxLat = 40.009834;
+	public static final double OMinLat = 39.989681;
+	//D-中关村
+	public static final double DMaxLon = 116.318009;
+	public static final double DMinLon = 116.303547;
+	public static final double DMaxLat = 39.985287;
+	public static final double DMinLat = 39.975521;
+	//R-Routes范围
+	public static final double RMaxLon = 116.416936;
+	public static final double RMinLon = 116.303547;
+	public static final double RMaxLat = 40.009834;
+	public static final double RMinLat = 39.975521;	
+	*/
+	/*
+	//O-天通苑
+	public static final double OMaxLon = 116.442177;
+	public static final double OMinLon = 116.406162;
+	public static final double OMaxLat = 40.079664;
+	public static final double OMinLat = 40.061106;
+	//D-中关村
+	public static final double DMaxLon = 116.318009;
+	public static final double DMinLon = 116.303547;
+	public static final double DMaxLat = 39.985287;
+	public static final double DMinLat = 39.975521;
+	//R-Routes范围
+	public static final double RMaxLon = 116.462177;
+	public static final double RMinLon = 116.303547;
+	public static final double RMaxLat = 40.079664;
+	public static final double RMinLat = 39.975521;	
+	*/
+	/*
+	//O-中关村
+	public static final double OMaxLon = 116.318009;
+	public static final double OMinLon = 116.303547;
+	public static final double OMaxLat = 39.985287;
+	public static final double OMinLat = 39.975521;
+	//D-国贸
+	public static final double DMaxLon = 116.477652;
+	public static final double DMinLon = 116.450161;
+	public static final double DMaxLat = 39.913619;
+	public static final double DMinLat = 39.903507;
+	//R-Routes范围
+	public static final double RMaxLon = 116.477652;
+	public static final double RMinLon = 116.303547;
+	public static final double RMaxLat = 39.985287;
+	public static final double RMinLat = 39.903507;	
+	*/
+	/*
+	//O-宋家庄
+	public static final double OMaxLon = 116.450054;
+	public static final double OMinLon = 116.421987;
+	public static final double OMaxLat = 39.858744;
+	public static final double OMinLat = 39.845862;
+	//D-金融街
+	public static final double DMaxLon = 116.372984;
+	public static final double DMinLon = 116.353458;
+	public static final double DMaxLat = 39.918422;
+	public static final double DMinLat = 39.905946;
+	//R-Routes范围
+	public static final double RMaxLon = 116.450054;
+	public static final double RMinLon = 116.353458;
+	public static final double RMaxLat = 39.918422;
+	public static final double RMinLat = 39.845862;	
+	*/
 	
+	//O-通州
+	public static final double OMaxLon = 116.691626;
+	public static final double OMinLon = 116.644964;
+	public static final double OMaxLat = 39.909760;
+	public static final double OMinLat = 39.885705;
+	//D-中关村
+	public static final double DMaxLon = 116.318009;
+	public static final double DMinLon = 116.303547;
+	public static final double DMaxLat = 39.985287;
+	public static final double DMinLat = 39.975521;
+	//R-Routes范围
+	public static final double RMaxLon = 116.691626;
+	public static final double RMinLon = 116.303547;
+	public static final double RMaxLat = 40.005287;
+	public static final double RMinLat = 39.885705;	
+	
+	/*
+	//O-亚运村
+	public static final double OMaxLon = 116.416936;
+	public static final double OMinLon = 116.400242;
+	public static final double OMaxLat = 40.009834;
+	public static final double OMinLat = 39.989681;
+	//D-金融街
+	public static final double DMaxLon = 116.372984;
+	public static final double DMinLon = 116.353458;
+	public static final double DMaxLat = 39.918422;
+	public static final double DMinLat = 39.905946;
+	//R-Routes范围
+	public static final double RMaxLon = 116.416936;
+	public static final double RMinLon = 116.353458;
+	public static final double RMaxLat = 40.009834;
+	public static final double RMinLat = 39.905946;	
+	*/
+	/*
+	//O-
+	public static final double OMaxLon = ;
+	public static final double OMinLon = ;
+	public static final double OMaxLat = ;
+	public static final double OMinLat = ;
+	//D-
+	public static final double DMaxLon = ;
+	public static final double DMinLon = ;
+	public static final double DMaxLat = ;
+	public static final double DMinLat = ;
+	//R-Routes范围
+	public static final double RMaxLon = ;
+	public static final double RMinLon = ;
+	public static final double RMaxLat = ;
+	public static final double RMinLat = ;	
+	*/
 	public static List<StayRecord> stayRecords = new LinkedList<StayRecord>();
 	public static List<StayRecord> ODRecords = new LinkedList<StayRecord>();
 	
@@ -103,7 +223,7 @@ public class ODSelection {
 					continue;
 				}
 				//如果终点在D范围内
-				if(label!=-1 && i-label+1>=40 && lon<DMaxLon && lon>DMinLon && lat<DMaxLat && lat>DMinLat){
+				if(label!=-1 && i-label+1>=20 && i-label+1<=60 && lon<DMaxLon && lon>DMinLon && lat<DMaxLat && lat>DMinLat){
 					for(int j=label;j<=i;j++){
 						StayPoint point = new StayPoint(user.getStayPoints().get(j));
 						if(j==label)
@@ -119,7 +239,7 @@ public class ODSelection {
 	}
 	//导出OD数据
 	public static void exportOD(String ODRecordFileName)throws Exception{
-		ODRecordFileName = Config.getAttr(Config.ODRecordPath)+File.separator + ODRecordFileName;
+		ODRecordFileName = Config.getAttr(Config.PatternPath)+File.separator + ODRecordFileName;
 		System.out.println("Now exporting ODRecord: "+ODRecordFileName);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(ODRecordFileName,true));
 		DecimalFormat df = new DecimalFormat("#.000000");
@@ -133,19 +253,24 @@ public class ODSelection {
 	
 	public static void main(String[] args)throws Exception{
 		Config.init();
-		File stayRecordPath = new File(Config.getAttr(Config.StayRecordPath));
-		File[] stayRecordFiles = stayRecordPath.listFiles();
-		int k=0;
-		for(File file:stayRecordFiles){
-			k++;
-			//if((k&1)==1)
-			//	continue;
-			importStayRecord(file);
-			extractOD();
-			exportOD("moreThan40Out.txt");
-			//if(k>=40)
-			//	break;
-		}
+		File[] datePath = new File(Config.getAttr(Config.WorkPath)).listFiles();
+		for(File file:datePath){
+			File stayRecordPath = new File(file.getAbsolutePath()+"\\7stayRecord");
+			System.out.println(stayRecordPath.getAbsolutePath());
+			File[] stayRecordFiles = stayRecordPath.listFiles();
+			int k=0;
+			for(File stayfile:stayRecordFiles){
+				k++;
+				//if((k&1)==1)
+				//	continue;
+				importStayRecord(stayfile);
+				extractOD();
+				exportOD("tongzhou_zhongguancun_new.txt");
+				//if(k>=40)
+				//	break;
+			}
+		}//every day
+		
 		System.out.println("finish");
 	}
 }

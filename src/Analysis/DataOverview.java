@@ -113,9 +113,10 @@ public class DataOverview {
 				if(af.equals(lastAf)){
 					int t = Integer.valueOf(time.substring(0,2))*60+Integer.valueOf(time.substring(2,4));
 					int lt = Integer.valueOf(lastTime.substring(0,2))*60+Integer.valueOf(lastTime.substring(2,4));
-					value = lt-t;
+					value = t-lt;
+					//System.out.println(time+":"+lastTime+":"+value);
 					if(value<0)
-						continue;
+						;
 					else if(value<=10)
 						updNum[0]+=1;
 					else if(value<=30)
@@ -240,11 +241,13 @@ public class DataOverview {
 		minLat = Double.valueOf(Config.getAttr(Config.CityMinLat));
 		idLength = Integer.valueOf(Config.getAttr(Config.IdLength));
 		//heatMap(new File(Config.getAttr(Config.FixedPath)));
-		recordNum(new File(Config.getAttr(Config.FixedPath)));
-		//updatePeriod(new File(Config.getAttr(Config.FixedPath)));
+		//recordNum(new File(Config.getAttr(Config.FixedPath)));
+		updatePeriod(new File(Config.getAttr(Config.FixedPath)));
 		//numPerhour(new File(Config.getAttr(Config.FixedPath)));
 		//userPerhour(new File(Config.getAttr(Config.FixedPath)));
 		//generateJson("F:\\sample\\phone_heat_data_"+Config.getAttr(Config.Date)+".json");
+		for(int i=0;i<updNum.length;i++)
+			System.out.println(updNum[i]);
 		System.out.println("finish");
 	}
 }
