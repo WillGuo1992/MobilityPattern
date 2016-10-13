@@ -30,7 +30,7 @@ import Model.StayRecord;
  */
 
 public class ODSelection {
-	/*
+	
 	//O-天通苑
 	public static final double OMaxLon = 116.442177;
 	public static final double OMinLon = 116.406162;
@@ -46,7 +46,7 @@ public class ODSelection {
 	public static final double RMinLon = 116.391873;
 	public static final double RMaxLat = 40.113943;
 	public static final double RMinLat = 39.893205;
-	*/
+	
 	/*
 	//O-亚运村
 	public static final double OMaxLon = 116.416936;
@@ -115,7 +115,7 @@ public class ODSelection {
 	public static final double RMaxLat = 39.918422;
 	public static final double RMinLat = 39.845862;	
 	*/
-	
+	/*
 	//O-通州
 	public static final double OMaxLon = 116.691626;
 	public static final double OMinLon = 116.644964;
@@ -131,7 +131,7 @@ public class ODSelection {
 	public static final double RMinLon = 116.303547;
 	public static final double RMaxLat = 40.005287;
 	public static final double RMinLat = 39.885705;	
-	
+	*/
 	/*
 	//O-亚运村
 	public static final double OMaxLon = 116.416936;
@@ -223,7 +223,7 @@ public class ODSelection {
 					continue;
 				}
 				//如果终点在D范围内
-				if(label!=-1 && i-label+1>=20 && i-label+1<=60 && lon<DMaxLon && lon>DMinLon && lat<DMaxLat && lat>DMinLat){
+				if(label!=-1 && i-label+1>=5 && i-label+1<=60 && lon<DMaxLon && lon>DMinLon && lat<DMaxLat && lat>DMinLat){
 					for(int j=label;j<=i;j++){
 						StayPoint point = new StayPoint(user.getStayPoints().get(j));
 						if(j==label)
@@ -254,7 +254,10 @@ public class ODSelection {
 	public static void main(String[] args)throws Exception{
 		Config.init();
 		File[] datePath = new File(Config.getAttr(Config.WorkPath)).listFiles();
+		int days = 0;
 		for(File file:datePath){
+			if(days++>0)
+				break;
 			File stayRecordPath = new File(file.getAbsolutePath()+"\\7stayRecord");
 			System.out.println(stayRecordPath.getAbsolutePath());
 			File[] stayRecordFiles = stayRecordPath.listFiles();
@@ -265,7 +268,7 @@ public class ODSelection {
 				//	continue;
 				importStayRecord(stayfile);
 				extractOD();
-				exportOD("tongzhou_zhongguancun_new.txt");
+				exportOD("comp_tiantongyuan_guomao.txt");
 				//if(k>=40)
 				//	break;
 			}

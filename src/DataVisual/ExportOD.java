@@ -30,9 +30,11 @@ public class ExportOD {
 		File ODRoutesPath = new File("K:\\BJmobilePattern2014\\songjiazhuang_jinrongjie\\bad");
 		File[] ODFiles = ODRoutesPath.listFiles();
 		for(File file:ODFiles){
-			if(file.getName().matches("..txt")){
+			System.out.println(file.getName());
+			if(file.getName().matches(".*txt$")){
 				System.out.println("ok");
 			}
 		}
+		System.out.println("finish");
 	}
 }
