@@ -1,6 +1,10 @@
 package DataVisual;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,15 +29,39 @@ import Model.StayRecord;
  * 7stayRecord:从5goodRecord中提取出的用户停留点记录
  */
 public class ExportOD {
+	public static double midLon=0.0,midLat=0.0;
+	public static BufferedReader br;
+	public static BufferedWriter bw;
+	public static void BeforeExport(File output)throws Exception{
+		bw = new BufferedWriter(new FileWriter(output,true));
+		bw.write("{\n");
+		bw.write("\"routes\":[\n");
+		bw.close();
+	}
+	public static void Export(File input,File output)throws Exception{
+		br = new BufferedReader(new FileReader(input));
+		bw = new BufferedWriter(new FileWriter(output,true));
+		bw.write("[\n");
+		
+		bw.write("],\n");
+		br.close();
+		bw.close();
+	}
+	public static void AfterExport(File output)throws Exception{
+		bw = new BufferedWriter(new FileWriter(output,true));
+		bw.close();
+	}
 	public static void main(String[] args)throws Exception{
 		//Config.init();
 		File ODRoutesPath = new File("K:\\BJmobilePattern2014\\songjiazhuang_jinrongjie\\bad");
 		File[] ODFiles = ODRoutesPath.listFiles();
+		File outputFile = new File("K:\\BJmobilePattern2014\\songjiazhuang_jirongjie.json");
 		for(File file:ODFiles){
 			System.out.println(file.getName());
 			if(file.getName().matches(".*txt$")){
-				System.out.println("ok");
+				Export(file,outputFile);
 			}
+			
 		}
 		System.out.println("finish");
 	}
