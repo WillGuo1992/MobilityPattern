@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import Config.Config;
 import DBSCANforTrip.Cluster;
@@ -29,9 +32,33 @@ import Model.StayRecord;
  * 7stayRecord:从5goodRecord中提取出的用户停留点记录
  */
 public class ExportOD {
-	public static double midLon=0.0,midLat=0.0;
+	public static double midOLon=0.0,midOLat=0.0,midDLat=0.0,midDLon=0.0;
+	public static int ONum=0,DNum=0;
 	public static BufferedReader br;
 	public static BufferedWriter bw;
+	public static int label=0;
+	public static boolean isFirstFile=true,isFirstUser=false,isFirstLine=false;
+	public static double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+	public static String LocToBaidu(String lon,String lat){
+		double x = Double.valueOf(lon);
+		double y = Double.valueOf(lat);
+		double z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);  
+	    double theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);  
+	    double bd_lon = z * Math.cos(theta) + 0.0065;  
+	    double bd_lat = z * Math.sin(theta) + 0.006;
+	    String ans = String.valueOf(bd_lon)+","+String.valueOf(bd_lat);
+	    return ans;
+	}
+	public static String LocToBaidu(double lon,double lat){
+		double x = lon;
+		double y = lat;
+		double z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);  
+	    double theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);  
+	    double bd_lon = z * Math.cos(theta) + 0.0065;  
+	    double bd_lat = z * Math.sin(theta) + 0.006;
+	    String ans = String.valueOf(bd_lon)+","+String.valueOf(bd_lat);
+	    return ans;
+	}
 	public static void BeforeExport(File output)throws Exception{
 		bw = new BufferedWriter(new FileWriter(output,true));
 		bw.write("{\n");
@@ -41,28 +68,75 @@ public class ExportOD {
 	public static void Export(File input,File output)throws Exception{
 		br = new BufferedReader(new FileReader(input));
 		bw = new BufferedWriter(new FileWriter(output,true));
-		bw.write("[\n");
-		
-		bw.write("],\n");
+		if(isFirstFile){
+			bw.write("\n[\n");
+			isFirstFile=false;
+		}else
+			bw.write(",\n[\n");
+		String af;
+		String[] afs;
+		isFirstUser=true;
+		while((af=br.readLine())!=null){
+			afs = af.split(",");
+			if(afs.length!=6)
+				continue;
+			if(afs[5].equals("2")){
+				midOLon+=Double.valueOf(afs[3]);
+				midOLat+=Double.valueOf(afs[4]);
+				ONum+=1;
+				if(isFirstUser){
+					bw.write("\n[\n");
+					isFirstUser=false;
+				}else
+					bw.write(",\n[\n");
+				isFirstLine=true;
+			}else if(afs[5].equals("0")){
+				if(isFirstLine){
+					bw.write("{\"coords\":["+LocToBaidu(afs[3],afs[4])+"],\"is_special\":false,\"label\":\""+String.valueOf(label++)+"\"}");
+					isFirstLine=false;
+				}else
+					bw.write(",\n{\"coords\":["+LocToBaidu(afs[3],afs[4])+"],\"is_special\":false,\"label\":\""+String.valueOf(label++)+"\"}");
+			}else if(afs[5].equals("3")){
+				midDLon+=Double.valueOf(afs[3]);
+				midDLat+=Double.valueOf(afs[4]);
+				DNum+=1;
+				bw.write("]");
+			}
+		}
+		bw.write("\n]");
 		br.close();
 		bw.close();
 	}
 	public static void AfterExport(File output)throws Exception{
 		bw = new BufferedWriter(new FileWriter(output,true));
+		bw.write("\n],\n\"start\":{\n\"coords\":[");
+		System.out.println(midOLon);
+		System.out.println(ONum);
+		midOLon=midOLon/ONum;
+		midOLat=midOLat/ONum;
+		System.out.println(midOLon);
+		bw.write(LocToBaidu(midOLon,midOLat));
+		bw.write("],\n\"label\":\"\",\n\"is_special\":true\n},\n");
+		bw.write("\"end\":{\n\"coords\":[");
+		midDLon=midDLon/DNum;
+		midDLat=midDLat/DNum;
+		bw.write(LocToBaidu(midDLon,midDLat));
+		bw.write("],\n\"label\":\"\",\n\"is"
+				+ "_special\":true\n}\n}");
 		bw.close();
 	}
 	public static void main(String[] args)throws Exception{
 		//Config.init();
-		File ODRoutesPath = new File("K:\\BJmobilePattern2014\\songjiazhuang_jinrongjie\\bad");
+		File ODRoutesPath = new File("K:\\odCluster\\yayuncun_jinrongjie\\good");
 		File[] ODFiles = ODRoutesPath.listFiles();
-		File outputFile = new File("K:\\BJmobilePattern2014\\songjiazhuang_jirongjie.json");
+		File outputFile = new File("E:\\DataVisual\\dv\\data\\od\\yayuncun_jinrongjie.json");
+		BeforeExport(outputFile);
 		for(File file:ODFiles){
-			System.out.println(file.getName());
 			if(file.getName().matches(".*txt$")){
 				Export(file,outputFile);
 			}
-			
 		}
+		AfterExport(outputFile);
 		System.out.println("finish");
 	}
 }
