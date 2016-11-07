@@ -40,12 +40,14 @@ public class GeneratePoint {
 	}
 	public static void main(String[] args)throws Exception{
 		String input = "K:\\BJMoblieCellData2014\\20141105\\1fixed\\00.txt";
-		String output = "K:\\pointGraph.csv";
+		String output = "K:\\spanGraph.csv";
+		int[] nums = new int[240];
 		BufferedReader br= new BufferedReader(new FileReader(input));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(output));
 		String af = null;
 		String lastId = null, lastTime = null;
-		double dis,span,lastLon=0.0,lastLat=0.0,lon=0.0,lat=0.0;
+		int span;
+		double dis,lastLon=0.0,lastLat=0.0,lon=0.0,lat=0.0;
 		while((af = br.readLine())!=null){
 			String[] afs= af.split(",");
 			if(!afs[0].equals(lastId)){
@@ -61,12 +63,16 @@ public class GeneratePoint {
 			dis=distanceInGlobal(lastLon,lastLat,lon,lat);
 			if(dis<1 || span<1)
 				continue;
+			if(span<nums.length)
+				nums[span]+=1;
 			lastId=afs[0];
 			lastTime=afs[2];
 			lastLon=lon;
 			lastLat=lat;
-			bw.write(String.valueOf(dis)+","+String.valueOf(span)+"\n");
+			//bw.write(String.valueOf(dis)+","+String.valueOf(span)+"\n");
 		}
+		for(int i=0;i<nums.length;i++)
+			bw.write(String.valueOf(nums[i])+","+String.valueOf(i)+"\n");
 		br.close();
 		bw.close();
 	}
