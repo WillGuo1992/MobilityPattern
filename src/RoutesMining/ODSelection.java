@@ -268,7 +268,7 @@ public class ODSelection {
 				//	continue;
 				importStayRecord(stayfile);
 				extractOD();
-				exportOD("All20Days_tongzhou_zhongguancun.txt");
+				exportOD("All20Days_tongzhou_zhongguancun170105.txt");
 				//if(k>=40)
 				//	break;
 			}

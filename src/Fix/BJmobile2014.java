@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -231,7 +232,93 @@ public class BJmobile2014 {
 		}
 		bws[0].close();
 	}
-	
+	/*
+	 * 修复基站抖动的数据
+	 * 修复方法：使用抖动数据前后数据经纬度的平均值取代抖动数据原经纬度
+	 */
+	public static void repairJitter(File fixedFile)throws Exception{
+		int all=0,wrong=0;
+		DecimalFormat df = new DecimalFormat("#.000000");
+		System.out.println("Now repairing "+fixedFile.getAbsolutePath());
+		br = new BufferedReader(new FileReader(fixedFile));
+		int len=0;
+		String af;
+		String[] afList;
+		while((af=br.readLine())!=null)
+			len+=1;
+		br.close();
+		if(len==0)
+			return;
+		afList = new String[len];
+		br = new BufferedReader(new FileReader(fixedFile));
+		int i=0;
+		while((af=br.readLine())!=null)
+			afList[i++]=af;
+		br.close();
+		//System.out.println("start repair");
+		for(i=1;i<len-1;i++){
+			String[] now = afList[i].split(",");
+			String[] before = afList[i-1].split(",");
+			String[] after = afList[i+1].split(",");
+			if(!now[0].equals(before[0]) || !now[0].equals(after[0]))
+				continue;
+			int t1=timeInterval(before[2],now[2]);
+			int t2=timeInterval(now[2],after[2]);
+			double bLon = Double.parseDouble(before[5]),bLat = Double.parseDouble(before[6]);
+			double nLon = Double.parseDouble(now[5]),nLat = Double.parseDouble(now[6]);
+			double aLon = Double.parseDouble(after[5]),aLat = Double.parseDouble(after[6]);
+			double dis1 = distanceInGlobal(bLon,bLat,nLon,nLat);
+			double dis2 = distanceInGlobal(nLon,nLat,aLon,aLat);
+			double dis3 = distanceInGlobal(aLon,aLat,bLon,bLat);
+			// 150km/h 约等于 41m/s
+			if(dis1>3000 && dis2>3000 && dis3<1000 && dis2/t2>50 && dis1/t1>50){
+				//for(int j=i-1;j<i+2;j++)
+				//	System.out.println((j-i+2)+":"+afList[j]);
+				nLon = (bLon+aLon)/2.0;
+				nLat = (bLat+aLat)/2.0;
+				now[5]=df.format(nLon);
+				now[6]=df.format(nLat);
+				afList[i]=now[0];
+				for(int j=1;j<now.length;j++)
+					afList[i]=afList[i]+","+now[j];
+				//for(int j=i-1;j<i+2;j++)
+				//	System.out.println((j-i+2)+"::"+afList[j]);
+				wrong+=1;
+				
+			}
+			all+=1;
+		}
+		System.out.println(wrong*1.0/all);
+		//System.out.println("finish repair");
+		
+		bws = new BufferedWriter[1];
+		bws[0] = new BufferedWriter(new FileWriter(fixedFile));
+		for(String afs:afList)
+			bws[0].write(afs+"\n");
+		bws[0].close();
+		
+	}
+	/*
+	 * 计算两个时间字符串的时间差,time2-time1,单位为秒
+	 */
+	public static int timeInterval(String time1, String time2){
+		int t1=Integer.parseInt(time1.substring(0,2))*3600+Integer.parseInt(time1.substring(2,4))*60+Integer.parseInt(time1.substring(4,6));
+		int t2=Integer.parseInt(time2.substring(0,2))*3600+Integer.parseInt(time2.substring(2,4))*60+Integer.parseInt(time2.substring(4,6));
+		return t2-t1;
+	}
+	/*
+	 * 计算两位置之间的距离，根据球面坐标长度公式计算(单位：米)
+	 * 注意，这个计算很耗时间,另外,这个计算把经纬度的100万倍还原了!
+	 */
+	public static double distanceInGlobal(double lon1, double lat1, double lon2, double lat2){
+		double x1 = lon1;
+		double y1 = lat1;
+		double x2 = lon2;
+		double y2 = lat2;
+
+		double L = (3.1415926*6370/180)*Math.sqrt((Math.abs((x1)-(x2)))*(Math.abs((x1)-(x2)))*(Math.sin((90-(y1))*(3.1415926/180)))*(Math.sin((90-(y1))*(3.1415926/180)))+(Math.abs((y1)-(y2)))*(Math.abs((y1)-(y2))));
+		return L * 1000;
+	}
 	public static void main(String[] args)throws Exception{
 		Config.init();
 		cityMaxLon = Double.valueOf(Config.getAttr(Config.CityMaxLon));
@@ -242,6 +329,7 @@ public class BJmobile2014 {
 		
 		File rawPath = new File(Config.getAttr(Config.RawPath));
 		File[] rawFiles = rawPath.listFiles();
+		/*
 		//生成输出目录
 		mkDir(fileNames_100,Config.getAttr(Config.FixedPath));
 		//读取基站位置数据
@@ -250,9 +338,10 @@ public class BJmobile2014 {
 		for(File file:rawFiles){
 			splitFile(file);
 		}
-		
+		*/
 		File fixedPath = new File(Config.getAttr(Config.FixedPath));
 		File[] fixedFiles = fixedPath.listFiles();
+		/*
 		//按id和timestamp排序
 		for(File file:fixedFiles){
 			sortByIdTime(file);
@@ -262,6 +351,11 @@ public class BJmobile2014 {
 		useful=0;
 		for(File file:fixedFiles){
 			deleteRepeat(file);
+		}
+		*/
+		//修复基站抖动数据
+		for(File file:fixedFiles){
+			repairJitter(file);
 		}
 		System.out.println("finish");
 		System.out.println("total:"+String.valueOf(total));
