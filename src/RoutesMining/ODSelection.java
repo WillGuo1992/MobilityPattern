@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import Config.Config;
 import Model.RawPoint;
@@ -30,7 +32,7 @@ import Model.StayRecord;
  */
 
 public class ODSelection {
-	/*
+	
 	//O-天通苑
 	public static final double OMaxLon = 116.442177;
 	public static final double OMinLon = 116.406162;
@@ -46,7 +48,7 @@ public class ODSelection {
 	public static final double RMinLon = 116.391873;
 	public static final double RMaxLat = 40.113943;
 	public static final double RMinLat = 39.893205;
-	*/
+	
 	/*
 	//O-亚运村
 	public static final double OMaxLon = 116.416936;
@@ -115,7 +117,7 @@ public class ODSelection {
 	public static final double RMaxLat = 39.918422;
 	public static final double RMinLat = 39.845862;	
 	*/
-	
+	/*
 	//O-通州
 	public static final double OMaxLon = 116.691626;
 	public static final double OMinLon = 116.644964;
@@ -131,7 +133,7 @@ public class ODSelection {
 	public static final double RMinLon = 116.303547;
 	public static final double RMaxLat = 40.005287;
 	public static final double RMinLat = 39.885705;	
-	
+	*/
 	/*
 	//O-亚运村
 	public static final double OMaxLon = 116.416936;
@@ -223,7 +225,7 @@ public class ODSelection {
 					continue;
 				}
 				//如果终点在D范围内
-				if(label!=-1 && i-label+1>=5 && i-label+1<=60 && lon<DMaxLon && lon>DMinLon && lat<DMaxLat && lat>DMinLat){
+				if(label!=-1 && lon<DMaxLon && lon>DMinLon && lat<DMaxLat && lat>DMinLat){
 					for(int j=label;j<=i;j++){
 						StayPoint point = new StayPoint(user.getStayPoints().get(j));
 						if(j==label)
@@ -250,9 +252,39 @@ public class ODSelection {
 		}
 		bw.close();
 	}
-	
+	/*
+	 * 统计每个ID出现的天数
+	 */
+	public static void statUserDay(String ODRecordFileName)throws Exception{
+		ODRecordFileName = Config.getAttr(Config.PatternPath)+File.separator + ODRecordFileName;
+		System.out.println("Now exporting ODRecord: "+ODRecordFileName);
+		BufferedReader br = new BufferedReader(new FileReader(ODRecordFileName));
+		Map<String,Integer> user = new HashMap<String,Integer>();
+		String af;
+		String[] afs;
+		while((af=br.readLine())!=null){
+			afs=af.split(",");
+			if(!afs[5].equals("2"))
+				continue;
+			if(user.containsKey(afs[0]))
+				user.put(afs[0], user.get(afs[0])+1);
+			else
+				user.put(afs[0], 1);
+		}
+		int max=0;
+		for(String name:user.keySet())
+			if(user.get(name)>max)
+				max=user.get(name);
+		int[] list = new int[max+1];
+		for(String name:user.keySet())
+			list[user.get(name)]+=1;
+		for(int i=0;i<list.length;i++)
+			System.out.println(i+":"+list[i]);
+		br.close();
+	}
 	public static void main(String[] args)throws Exception{
 		Config.init();
+		
 		File[] datePath = new File(Config.getAttr(Config.WorkPath)).listFiles();
 		int days = 0;
 		for(File file:datePath){
@@ -266,14 +298,19 @@ public class ODSelection {
 				k++;
 				//if((k&1)==1)
 				//	continue;
+				
+				
 				importStayRecord(stayfile);
 				extractOD();
-				exportOD("All20Days_tongzhou_zhongguancun170105.txt");
+				exportOD("All20Days_tiantongyuan_guomao170105test.txt");
+				
+				
 				//if(k>=40)
 				//	break;
 			}
 		}//every day
 		
+		statUserDay("All20Days_tiantongyuan_guomao170105test.txt");
 		System.out.println("finish");
 	}
 }

@@ -6,7 +6,7 @@ public class StayPoint{
 	private String sTime,eTime;
 	private int event;//信令数据事件位，暂时不用
 	private int state;//0：移动点;1：停留点；2:Origin;3:Destination
-	private int type;//停留点类型，0:未标定；1:居住地；2:工作地；3:休闲地；当且仅当state!=0时该位有意义。
+	private int type;//停留点类型，0:未标定；1:居住地；2:工作地；3:其它；当且仅当state!=0时该位有意义。
 	public StayPoint(){
 		
 	}
