@@ -15,8 +15,8 @@ import Config.Config;
 import DBSCAN.Cluster;
 import DBSCAN.ClusterAnalysis;
 import DBSCAN.DataPoint;
-import Model.PatternPoint;
-import Model.PatternRecord;
+import Model.OldPtnPoint;
+import Model.OldPtnRecord;
 import Model.StayPoint;
 /*
  * author:youg
@@ -29,13 +29,16 @@ import Model.StayPoint;
  * 4goodUser:数据质量好、用于下一步分析的用户ID列表。提取规则：7点前、19点后有记录，7-19点每3个小时有记录的用户数所占比例；用户比例：55%
  * 5goodRecord:4goodUser列表里的用户的完整记录，按id后两位分割到不同文件中
  * 7stayRecord:从5goodRecord中提取出的用户停留点记录
- * patternRecord:从连续多天的7stayRecord中提取出的每个用户的停留模式
+ * OldPtnRecord:从连续多天的7stayRecord中提取出的每个用户的停留模式
  */
-public class getPatternRecord {
+
+@Deprecated
+public class getOldPtnRecord {
 	public static int total=0;
 	public static int single=0;
 	public static Map<String,List<DataPoint>> map;//存储（id,多日停留点序列）对
-	public static List<PatternRecord> patternRecords;//
+	@Deprecated
+	public static List<OldPtnRecord> OldPtnRecords;//
 	public static BufferedReader br;
 	public static BufferedWriter bw;
 	public static int dayLength;//可分析数据天数
@@ -79,8 +82,8 @@ public class getPatternRecord {
 	 * 对集合内元素进行分析
 	 * 该函数实现聚类主要策略
 	 */
-	public static PatternRecord generatePatternRecord(String id,List<Cluster> clusterList){
-		PatternRecord pr = new PatternRecord(id);
+	public static OldPtnRecord generateOldPtnRecord(String id,List<Cluster> clusterList){
+		OldPtnRecord pr = new OldPtnRecord(id);
 		/*
 		System.out.println("************************************");
 		System.out.println(id);
@@ -100,7 +103,7 @@ public class getPatternRecord {
 			total+=1;
 			if(dps.size()==1){
 				DataPoint dp = dps.get(0);
-				PatternPoint pp = new PatternPoint(dp.getLon(),dp.getLat(),0,1,0.0);
+				OldPtnPoint pp = new OldPtnPoint(dp.getLon(),dp.getLat(),0,1,0.0);
 				pp.getSTimes().add(dp.getSTime());
 				pp.getETimes().add(dp.getETime());
 				pr.getDynamicPoints().add(pp);
@@ -108,7 +111,7 @@ public class getPatternRecord {
 				continue;
 			}
 			//聚类集合有多个点的情况
-			PatternPoint pp = new PatternPoint(0.0,0.0,0,dps.size(),0.0);
+			OldPtnPoint pp = new OldPtnPoint(0.0,0.0,0,dps.size(),0.0);
 			double mLon=0.0;
 			double mLat=0.0;
 			int[] timeTag=new int[288];
@@ -160,14 +163,14 @@ public class getPatternRecord {
 		return pr;
 	}
 	//识别停留点属性
-	public static void identifyPatternRecord(PatternRecord patternRecord){
+	public static void identifyOldPtnRecord(OldPtnRecord OldPtnRecord){
 		
 	}
 	//输出停留模式
-	public static void exportPatternRecord(File stayRecordFile)throws Exception{
+	public static void exportOldPtnRecord(File stayRecordFile)throws Exception{
 		System.out.println("Now exporting "+stayRecordFile.getAbsolutePath());
 		int[] normalPPL = new int[6];
-		for(PatternRecord pr:patternRecords){
+		for(OldPtnRecord pr:OldPtnRecords){
 			int m = pr.getNormalPoints().size();
 			if(m!=1)
 				continue;
@@ -177,13 +180,13 @@ public class getPatternRecord {
 			System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 			System.out.println(pr.getId());
 			System.out.println("-----------------");
-			PatternPoint pp = pr.getNormalPoints().get(0);
+			OldPtnPoint pp = pr.getNormalPoints().get(0);
 			for(int i=0;i<pp.getSTimes().size();i++)
 				System.out.println(pp.getSTimes().get(i)+"-"+pp.getETimes().get(i));
 		}
 		for(int i=0;i<=5;i++)
 			System.out.println(i+":"+normalPPL[i]);
-		//for(PatternRecord pr:patternRecords)
+		//for(OldPtnRecord pr:OldPtnRecords)
 		//	System.out.println(pr.toString());
 	}
 	public static void print(String id,List<Cluster> clusterList){
@@ -195,7 +198,7 @@ public class getPatternRecord {
 			}
 		}
 	}
-	public static void printPR(PatternRecord pr){
+	public static void printPR(OldPtnRecord pr){
 		if(!pr.getId().equals("3699470638537988000"))
 			return;
 		System.out.println(pr.getId()+"--pr------------");
@@ -226,26 +229,26 @@ public class getPatternRecord {
 				//System.out.println(stayRecordFilePerday[i].getAbsolutePath());
 			}
 			map = new HashMap<String,List<DataPoint>>();
-			patternRecords = new LinkedList<PatternRecord>();
+			OldPtnRecords = new LinkedList<OldPtnRecord>();
 			for(File file:stayRecordFilePerday){
 				importStayRecord(file);
 			}
 			shuffleStayRecord();
-			System.out.println("Now generatePatternRecord "+stayRecordFile.getName());
+			System.out.println("Now generateOldPtnRecord "+stayRecordFile.getName());
 			for(String id:map.keySet()){
 				ClusterAnalysis ca = new ClusterAnalysis();
 				List<Cluster> clusterList = ca.doDbscanAnalysis(map.get(id), 500, 1);
 				//print(id,clusterList);
 				//if(true)
 				//	continue;
-				PatternRecord pr = generatePatternRecord(id,clusterList);
+				OldPtnRecord pr = generateOldPtnRecord(id,clusterList);
 				//if(pr.getNormalPoints().size()==1)
 				//	print(id,clusterList);
 				//printPR(pr);
-				identifyPatternRecord(pr);
-				patternRecords.add(pr);
+				identifyOldPtnRecord(pr);
+				OldPtnRecords.add(pr);
 			}//endfor
-			exportPatternRecord(stayRecordFile);
+			exportOldPtnRecord(stayRecordFile);
 			//System.out.println("total="+total+";single="+single+"\n");
 			break;
 		}//endfor

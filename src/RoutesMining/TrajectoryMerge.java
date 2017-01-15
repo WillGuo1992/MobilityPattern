@@ -33,10 +33,10 @@ public class TrajectoryMerge {
 	public static BufferedReader br;
 	public static BufferedWriter bw;
 	//加载一个用户多日的trajectory
-	public static void loadRecord(File inputFile)throws Exception{
+	public static void loadRecord(File multiDayFile)throws Exception{
 		stayRecords = new LinkedList<StayRecord>();
 		//String id=null,date=null;
-		br = new BufferedReader(new FileReader(inputFile));
+		br = new BufferedReader(new FileReader(multiDayFile));
 		String af;
 		String[] afs;
 		while((af=br.readLine())!=null){
@@ -59,7 +59,7 @@ public class TrajectoryMerge {
 		br.close();
 	}
 	//把多日trajectory合并到一个trajectory
-	public static void mergeRecord(File inputFile)throws Exception{
+	public static void mergeRecord()throws Exception{
 		mergedRecord = new StayRecord(stayRecords.get(0).getId(),"00000000");
 		int days = stayRecords.size();
 		int[] pos = new int[days];
@@ -123,8 +123,8 @@ public class TrajectoryMerge {
 		mergedRecord.getStayPoints().add(new StayPoint(dLon,dLat,"000000","000000",0,3,0));//创建D点
 	}
 	//输出合并后的trajectory
-	public static void exportRecord(File inputFile)throws Exception{
-		String outputFileName = Config.getAttr(Config.PatternPath)+File.separator+"2mergedRecord"+File.separator+inputFile.getName();
+	public static void exportRecord(File mergedFile)throws Exception{
+		String outputFileName = Config.getAttr(Config.PatternPath)+File.separator+"2mergedRecord"+File.separator+mergedFile.getName();
 		File outputFile = new File(outputFileName);
 		bw = new BufferedWriter(new FileWriter(outputFile));
 		DecimalFormat df = new DecimalFormat("#.000000");
@@ -182,7 +182,7 @@ public class TrajectoryMerge {
 			//System.out.println("Now loading: "+file.getAbsolutePath());
 			loadRecord(file);
 			//System.out.println("Now merging: "+file.getAbsolutePath());
-			mergeRecord(file);
+			mergeRecord();
 			//System.out.println("Now exporting: "+file.getAbsolutePath());
 			exportRecord(file);
 			//System.out.println("Now exportingToDV: "+file.getAbsolutePath());
