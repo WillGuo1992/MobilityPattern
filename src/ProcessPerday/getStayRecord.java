@@ -225,6 +225,10 @@ public class getStayRecord {
 		sp.setState(1);
 		return sp;
 	}
+	//计算停留点属性（工作地或居住地或其它）
+	public static void calStayPointType()throws Exception{
+		
+	}
 	//输出StayRecord用户停留点信息
 	public static void exportStayRecord(String stayRecordFileName)throws Exception{
 		stayRecordFileName = Config.getAttr(Config.StayRecordPath)+File.separator + stayRecordFileName;

@@ -52,6 +52,14 @@ public class RoutesClustering {
 		}
 		br.close();
 	}
+	//轨迹聚类
+	public static void cluster() throws Exception{
+		
+	}
+	//评价指标计算
+	public static void calKPI() throws Exception{
+		
+	}
 	//导出ODRoutes
 	public static void exportODRoutes(List<Cluster> clusterList,File ODRoutesPath)throws Exception{
         if(clusterList!=null){

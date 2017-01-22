@@ -9,7 +9,7 @@ public class Grid {
 	public Grid(){
 		
 	}
-	public Grid(int id,double maxLon,double maxLat,double minLon,double minLat){
+	public Grid(int id,double minLon,double minLat,double maxLon,double maxLat){
 		this.id = id;
 		this.maxLon = maxLon;
 		this.maxLat = maxLat;
