@@ -98,7 +98,7 @@ public class MapCreate {
 		int L1id=10000;
 		for(int i=L1MinLon;i<L1MaxLon;i+=L1Step)
 			for(int j=L1MinLat;j<L1MaxLat;j+=L1Step){
-				Grid grid = new Grid(++L1id,i/100.0,j/100.0,(i+L1Step)/100.0,(j+L1Step)/100.0);
+				Grid grid = new Grid(++L1id,i/100.0,j/100.0,(i+L1Step)/100.0,(j+L1Step)/100.0,L1Step);
 				map.getL1Grids().add(grid);
 			}
 		int L2id=20000;
@@ -107,7 +107,7 @@ public class MapCreate {
 				//判断是否在L1区间内，如果在，则不生成L2网格
 				if(i>=L1MinLon && i<L1MaxLon && j>=L1MinLat && j<L1MaxLat)
 					continue;
-				Grid grid = new Grid(++L2id,i/100.0,j/100.0,(i+L2Step)/100.0,(j+L2Step)/100.0);
+				Grid grid = new Grid(++L2id,i/100.0,j/100.0,(i+L2Step)/100.0,(j+L2Step)/100.0,L2Step);
 				map.getL2Grids().add(grid);
 			}
 		int L3id=30000;
@@ -116,7 +116,7 @@ public class MapCreate {
 				//判断是否在L2区间内，如果在，则不生成L3网格
 				if(i>=L2MinLon && i<L2MaxLon && j>=L2MinLat && j<L2MaxLat)
 					continue;
-				Grid grid = new Grid(++L3id,i/100.0,j/100.0,(i+L3Step)/100.0,(j+L3Step)/100.0);
+				Grid grid = new Grid(++L3id,i/100.0,j/100.0,(i+L3Step)/100.0,(j+L3Step)/100.0,L3Step);
 				map.getL3Grids().add(grid);
 			}
 		/*
@@ -150,9 +150,9 @@ public class MapCreate {
 	public static void exportCSV(File csvFile)throws Exception{
 		bw = new BufferedWriter(new FileWriter(csvFile));
 		for(Grid grid:map.getL1Grids())
-			bw.write(grid.getId()+","+grid.getMinLon()+","+grid.getMinLat()+","+grid.getMaxLon()+","+grid.getMaxLat()+"\n");
+			bw.write(grid.getId()+","+grid.getMinLon()+","+grid.getMinLat()+","+grid.getMaxLon()+","+grid.getMaxLat()+","+grid.getStep()+"\n");
 		for(Grid grid:map.getL2Grids())
-			bw.write(grid.getId()+","+grid.getMinLon()+","+grid.getMinLat()+","+grid.getMaxLon()+","+grid.getMaxLat()+"\n");
+			bw.write(grid.getId()+","+grid.getMinLon()+","+grid.getMinLat()+","+grid.getMaxLon()+","+grid.getMaxLat()+","+grid.getStep()+"\n");
 		bw.close();
 		System.out.println("finish export CSV");
 	}
@@ -210,7 +210,7 @@ public class MapCreate {
 		CreateMap();
 		for(int i=0;i<a.length;i++)
 			UseLess.add(a[i]);
-		exportCSV(new File("E:\\Java\\TravelPattern\\MobilityPattern\\input\\Zone\\GridMap.csv"));
+		//exportCSV(new File("E:\\Java\\TravelPattern\\MobilityPattern\\input\\Zone\\GridMap.csv"));
 		//exportJSON(new File("E:\\DataVisual\\POIforSEEv160130\\json\\Afterchangetranszone.json"));
 	}
 }

@@ -171,7 +171,9 @@ public class getStayRecord {
 			stayRecords.add(stay);
 		}//end for user
 	}
-	//以停留点序列中每个停留点的停留时长作为权重计算停留点
+	/*
+	 * 以停留点序列中每个停留点的停留时长作为权重计算停留点
+	 */
 	public static StayPoint calStayPoint(List<RawPoint> tempStays){
 		StayPoint sp = new StayPoint();
 		long timeLength,totalTimeLength = 0;
@@ -225,19 +227,65 @@ public class getStayRecord {
 		sp.setState(1);
 		return sp;
 	}
-	//计算停留点属性（工作地或居住地或其它）
-	public static void calStayPointType()throws Exception{
-		
+	/*
+	 * 计算停留点属性（工作地或居住地或其它）
+	 */
+	public static void calStayPointType(List<StayRecord> stayRecords)throws Exception{
+		System.out.println("Now calStayPointTypeing");
+		int sWorkTime = 420;
+		int eWorkTime = 1140;
+		for(StayRecord user:stayRecords){
+			for(StayPoint point:user.getStayPoints()){
+				if(point.getState()==0)
+					continue;
+				int startTime = Integer.parseInt(point.getSTime().substring(0,2))*60+Integer.parseInt(point.getSTime().substring(2,4));
+				int endTime = Integer.parseInt(point.getETime().substring(0,2))*60+Integer.parseInt(point.getETime().substring(2,4));
+				if(endTime-startTime>900){
+					point.setType(1);//在某个地点停留超过15小时，直接判断为居住地
+					continue;
+				}
+				int workTime = intersectionTime(startTime,endTime,sWorkTime,eWorkTime);
+				if(workTime>=180 && workTime>(endTime-startTime)/2)
+					point.setType(2);//设置为工作地
+				else{
+					int homeTime = intersectionTime(startTime,endTime,0,sWorkTime)+
+									intersectionTime(startTime,endTime,eWorkTime,1440);
+					if(homeTime>=120 && homeTime>(endTime-startTime)/2)
+						point.setType(1);//设置为居住地
+					else
+						point.setType(3);//设置为其它
+				}
+			}
+		}
 	}
-	//输出StayRecord用户停留点信息
+	/*
+	 * 计算两个区间的交集，返回交集大小
+	 */
+	public static int intersectionTime(int st1,int et1,int st2,int et2){
+		if(et1<=st1 || et2<=st2 || et1<=st2 || st1>=et2)
+			return 0;
+		if(st1>=st2 && et1<=et2)
+			return et1-st1;
+		else if(st1<=st2 && et1>=et2)
+			return et2-st2;
+		else if(st1<=st2 && et1<=et2)
+			return et1-st2;
+		else if(st1>=st2 && et1>=et2)
+			return et2-st1;
+		else
+			return 0;
+	}
+	/*
+	 * 输出StayRecord用户停留点信息
+	 */
 	public static void exportStayRecord(String stayRecordFileName)throws Exception{
-		stayRecordFileName = Config.getAttr(Config.StayRecordPath)+File.separator + stayRecordFileName;
+		//stayRecordFileName = Config.getAttr(Config.StayRecordPath)+File.separator + stayRecordFileName;
 		System.out.println("Now exporting StayRecord: "+stayRecordFileName);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(stayRecordFileName));
 		DecimalFormat df = new DecimalFormat("#.000000");
 		for(StayRecord user:stayRecords){
 			for(StayPoint point:user.getStayPoints()){
-				bw.write(user.getId()+","+user.getDate()+","+point.getSTime()+"-"+point.getETime()+","+df.format(point.getLon())+","+df.format(point.getLat())+","+point.getState()+"\n");
+				bw.write(user.getId()+","+user.getDate()+","+point.getSTime()+"-"+point.getETime()+","+df.format(point.getLon())+","+df.format(point.getLat())+","+point.getState()+","+point.getType()+"\n");
 			}
 		}
 		bw.close();

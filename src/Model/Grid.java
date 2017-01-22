@@ -6,15 +6,17 @@ public class Grid {
 	private double maxLat;
 	private double minLon;
 	private double minLat;
+	private int step;//网格步长，1:0.01经纬度；3： 0.03经纬度；9： 0.09经纬度
 	public Grid(){
 		
 	}
-	public Grid(int id,double minLon,double minLat,double maxLon,double maxLat){
+	public Grid(int id,double minLon,double minLat,double maxLon,double maxLat,int step){
 		this.id = id;
 		this.maxLon = maxLon;
 		this.maxLat = maxLat;
 		this.minLon = minLon;
 		this.minLat = minLat;
+		this.step = step;
 	}
 	public void setId(int id){
 		this.id = id;
@@ -45,5 +47,11 @@ public class Grid {
 	}
 	public double getMinLat(){
 		return minLat;
+	}
+	public void setStep(int step){
+		this.step = step;
+	}
+	public int getStep(){
+		return step;
 	}
 }
