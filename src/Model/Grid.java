@@ -2,11 +2,11 @@ package Model;
 
 public class Grid {
 	private int id;
-	private double maxLon;
-	private double maxLat;
-	private double minLon;
-	private double minLat;
-	private int step;//网格步长，1:0.01经纬度；3： 0.03经纬度；9： 0.09经纬度
+	public double maxLon;
+	public double maxLat;
+	public double minLon;
+	public double minLat;
+	public int step;//网格步长，1:0.01经纬度；3： 0.03经纬度；9： 0.09经纬度
 	public Grid(){
 		
 	}
@@ -24,6 +24,7 @@ public class Grid {
 	public int getId(){
 		return id;
 	}
+	/*
 	public void setMaxLon(double maxLon){
 		this.maxLon= maxLon;
 	}
@@ -54,4 +55,5 @@ public class Grid {
 	public int getStep(){
 		return step;
 	}
+	*/
 }

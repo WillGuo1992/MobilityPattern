@@ -150,9 +150,9 @@ public class MapCreate {
 	public static void exportCSV(File csvFile)throws Exception{
 		bw = new BufferedWriter(new FileWriter(csvFile));
 		for(Grid grid:map.getL1Grids())
-			bw.write(grid.getId()+","+grid.getMinLon()+","+grid.getMinLat()+","+grid.getMaxLon()+","+grid.getMaxLat()+","+grid.getStep()+"\n");
+			bw.write(grid.getId()+","+grid.minLon+","+grid.minLat+","+grid.maxLon+","+grid.maxLat+","+grid.step+"\n");
 		for(Grid grid:map.getL2Grids())
-			bw.write(grid.getId()+","+grid.getMinLon()+","+grid.getMinLat()+","+grid.getMaxLon()+","+grid.getMaxLat()+","+grid.getStep()+"\n");
+			bw.write(grid.getId()+","+grid.minLon+","+grid.minLat+","+grid.maxLon+","+grid.maxLat+","+grid.step+"\n");
 		bw.close();
 		System.out.println("finish export CSV");
 	}
@@ -184,11 +184,11 @@ public class MapCreate {
 			bw.write("\t{\n\t\t\"type\":\"Feature\",\n\t\t\"properties\":{\n");
 			bw.write("\t\t\t\"id\":"+grid.getId()+",\n\t\t\t\"name\":\""+grid.getId()+"\",\n\t\t\t\"theme\": \"Home\",\n\t\t\t\"color\": \"#FFFFFF\"\n\t\t},\n");
 			bw.write("\t\t\"geometry\": {\n\t\t\t\"type\": \"Polygon\",\n\t\t\t\"coordinates\": [[\n");
-			bw.write("\t\t\t["+grid.getMinLon()+","+grid.getMinLat()+"],\n");
-			bw.write("\t\t\t["+grid.getMinLon()+","+grid.getMaxLat()+"],\n");
-			bw.write("\t\t\t["+grid.getMaxLon()+","+grid.getMaxLat()+"],\n");
-			bw.write("\t\t\t["+grid.getMaxLon()+","+grid.getMinLat()+"],\n");
-			bw.write("\t\t\t["+grid.getMinLon()+","+grid.getMinLat()+"]\n");
+			bw.write("\t\t\t["+grid.minLon+","+grid.minLat+"],\n");
+			bw.write("\t\t\t["+grid.minLon+","+grid.maxLat+"],\n");
+			bw.write("\t\t\t["+grid.maxLon+","+grid.maxLat+"],\n");
+			bw.write("\t\t\t["+grid.maxLon+","+grid.minLat+"],\n");
+			bw.write("\t\t\t["+grid.minLon+","+grid.minLat+"]\n");
 			bw.write("\t\t\t]]\n\t\t}\n\t},\n");
 		}
 		
@@ -198,11 +198,11 @@ public class MapCreate {
 			bw.write("\t{\n\t\t\"type\":\"Feature\",\n\t\t\"properties\":{\n");
 			bw.write("\t\t\t\"id\":"+grid.getId()+",\n\t\t\t\"name\":\""+grid.getId()+"\",\n\t\t\t\"theme\": \"Home\",\n\t\t\t\"color\": \"#FFFFFF\"\n\t\t},\n");
 			bw.write("\t\t\"geometry\": {\n\t\t\t\"type\": \"Polygon\",\n\t\t\t\"coordinates\": [[\n");
-			bw.write("\t\t\t["+grid.getMinLon()+","+grid.getMinLat()+"],\n");
-			bw.write("\t\t\t["+grid.getMinLon()+","+grid.getMaxLat()+"],\n");
-			bw.write("\t\t\t["+grid.getMaxLon()+","+grid.getMaxLat()+"],\n");
-			bw.write("\t\t\t["+grid.getMaxLon()+","+grid.getMinLat()+"],\n");
-			bw.write("\t\t\t["+grid.getMinLon()+","+grid.getMinLat()+"]\n");
+			bw.write("\t\t\t["+grid.minLon+","+grid.minLat+"],\n");
+			bw.write("\t\t\t["+grid.minLon+","+grid.maxLat+"],\n");
+			bw.write("\t\t\t["+grid.maxLon+","+grid.maxLat+"],\n");
+			bw.write("\t\t\t["+grid.maxLon+","+grid.minLat+"],\n");
+			bw.write("\t\t\t["+grid.minLon+","+grid.minLat+"]\n");
 			bw.write("\t\t\t]]\n\t\t}\n\t},\n");
 		}
 		bw.write("\t]\n};");

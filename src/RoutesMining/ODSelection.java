@@ -171,7 +171,7 @@ public class ODSelection {
 	public static List<StayRecord> stayRecords = new LinkedList<StayRecord>();
 	public static List<StayRecord> ODRecords = new LinkedList<StayRecord>();
 	
-	//载入停留点数据
+	//载入出行链（停留/移动点）
 	public static void importStayRecord(File stayRecordFile)throws Exception{
 		System.out.println("Now importing StayRecord: "+stayRecordFile.getAbsolutePath());
 		stayRecords.clear();
@@ -194,7 +194,7 @@ public class ODSelection {
 			point.setLon(Double.valueOf(afs[3]));
 			point.setLat(Double.valueOf(afs[4]));
 			point.setState(Integer.valueOf(afs[5]));
-			point.setType(0);
+			point.setType(Integer.valueOf(afs[6]));
 			point.setSTime(times[0]);
 			point.setETime(times[1]);
 			user.getStayPoints().add(point);
