@@ -5,7 +5,11 @@ import java.io.File;
 import Config.Config;
 import ProcessPerday.getStayRecord;
 import RoutesMining.ODSelection;
-
+/*
+ * author:youg
+ * date:20170123
+ * 临时构建的类，用于处理之前没有计算停留点属性的用户出行链数据
+ */
 public class RecoupStayPointType {
 	public static void main(String[] args)throws Exception{
 		Config.init();
@@ -22,9 +26,9 @@ public class RecoupStayPointType {
 				ODSelection.importStayRecord(stayfile);
 				getStayRecord.stayRecords = ODSelection.stayRecords;
 				getStayRecord.calStayPointType(getStayRecord.stayRecords);
-				String stayRecordFileName = stayRecordPath.getAbsolutePath()+"s\\"+stayfile.getName();
+				//String stayRecordFileName = stayRecordPath.getAbsolutePath()+"s\\"+stayfile.getName();
 				//System.out.println(stayRecordFileName);
-				getStayRecord.exportStayRecord(stayRecordFileName);
+				//getStayRecord.exportStayRecord(stayRecordFileName);
 			}
 		}//every day
 	}
