@@ -1,4 +1,4 @@
-package Analysis;
+package ODMatrix;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,7 +36,7 @@ public class MapCreate {
 	//一级
 	10001,10002,10003,10004,10005,10006,10007,10008,10009,10025,10026,10027,10028,10029,10030,10031,10032,
 	10049,10050,10051,10052,10053,10054,10055,10073,10074,10075,10076,10077,10078,10097,10098,10099,10100,10101,10121,10122,10123,10124,10145,
-	10553,10557,10601,10625,10626,10649,10650,10651,
+	10553,10577,10601,10625,10626,10649,10650,10651,
 	10673,10674,10675,10676,
 	10697,10698,10699,10700,
 	10721,10722,10723,10724,10725,
@@ -119,14 +119,14 @@ public class MapCreate {
 				Grid grid = new Grid(++L3id,i/100.0,j/100.0,(i+L3Step)/100.0,(j+L3Step)/100.0,L3Step);
 				map.getL3Grids().add(grid);
 			}
-		/*
+		
 		int L4id=40000;
 		for(int i=L1MinLon;i<L1MaxLon;i+=L2Step)
 			for(int j=L1MinLat;j<L1MaxLat;j+=L2Step){
 				//判断是否在L1区间内，如果在，则不生成L2网格
 				//if(i>=L1MinLon && i<L1MaxLon && j>=L1MinLat && j<L1MaxLat)
 				//	continue;
-				Grid grid = new Grid(++L2id,i/100.0,j/100.0,(i+L2Step)/100.0,(j+L2Step)/100.0);
+				Grid grid = new Grid(++L2id,i/100.0,j/100.0,(i+L2Step)/100.0,(j+L2Step)/100.0,L2Step);
 				map.getL2Grids().add(grid);
 			}
 		int L5id=50000;
@@ -135,10 +135,10 @@ public class MapCreate {
 				//判断是否在L2区间内，如果在，则不生成L3网格
 				//if(i>=L2MinLon && i<L2MaxLon && j>=L2MinLat && j<L2MaxLat)
 				//	continue;
-				Grid grid = new Grid(++L3id,i/100.0,j/100.0,(i+L3Step)/100.0,(j+L3Step)/100.0);
+				Grid grid = new Grid(++L3id,i/100.0,j/100.0,(i+L3Step)/100.0,(j+L3Step)/100.0,L3Step);
 				map.getL3Grids().add(grid);
 			}
-		*/
+		
 		System.out.println(L2id+L1id-30000);
 		System.out.println("finish create map");
 	}
@@ -163,9 +163,10 @@ public class MapCreate {
 	public static void exportJSON(File jsonFile)throws Exception{
 		bw = new BufferedWriter(new FileWriter(jsonFile));
 		bw.write("var tazData={\n\t\"type\":\"FeatureCollection\",\n\t\"features\":[\n");
+		/*
 		for(Grid grid:map.getL3Grids()){
-			//if(UseLess.contains(grid.getId()))
-			//	continue;
+			if(UseLess.contains(grid.getId()))
+				continue;
 			bw.write("\t{\n\t\t\"type\":\"Feature\",\n\t\t\"properties\":{\n");
 			bw.write("\t\t\t\"id\":"+grid.getId()+",\n\t\t\t\"name\":\""+grid.getId()+"\",\n\t\t\t\"theme\": \"Home\",\n\t\t\t\"color\": \"#FFFFFF\"\n\t\t},\n");
 			bw.write("\t\t\"geometry\": {\n\t\t\t\"type\": \"Polygon\",\n\t\t\t\"coordinates\": [[\n");
@@ -176,9 +177,10 @@ public class MapCreate {
 			bw.write("\t\t\t["+grid.getMinLon()+","+grid.getMinLat()+"]\n");
 			bw.write("\t\t\t]]\n\t\t}\n\t},\n");
 		}
+		*/
 		for(Grid grid:map.getL2Grids()){
-			//if(UseLess.contains(grid.getId()))
-			//	continue;
+			if(UseLess.contains(grid.getId()))
+				continue;
 			bw.write("\t{\n\t\t\"type\":\"Feature\",\n\t\t\"properties\":{\n");
 			bw.write("\t\t\t\"id\":"+grid.getId()+",\n\t\t\t\"name\":\""+grid.getId()+"\",\n\t\t\t\"theme\": \"Home\",\n\t\t\t\"color\": \"#FFFFFF\"\n\t\t},\n");
 			bw.write("\t\t\"geometry\": {\n\t\t\t\"type\": \"Polygon\",\n\t\t\t\"coordinates\": [[\n");
@@ -189,9 +191,10 @@ public class MapCreate {
 			bw.write("\t\t\t["+grid.getMinLon()+","+grid.getMinLat()+"]\n");
 			bw.write("\t\t\t]]\n\t\t}\n\t},\n");
 		}
+		
 		for(Grid grid:map.getL1Grids()){
-			//if(UseLess.contains(grid.getId()))
-			//	continue;
+			if(UseLess.contains(grid.getId()))
+				continue;
 			bw.write("\t{\n\t\t\"type\":\"Feature\",\n\t\t\"properties\":{\n");
 			bw.write("\t\t\t\"id\":"+grid.getId()+",\n\t\t\t\"name\":\""+grid.getId()+"\",\n\t\t\t\"theme\": \"Home\",\n\t\t\t\"color\": \"#FFFFFF\"\n\t\t},\n");
 			bw.write("\t\t\"geometry\": {\n\t\t\t\"type\": \"Polygon\",\n\t\t\t\"coordinates\": [[\n");
@@ -211,6 +214,6 @@ public class MapCreate {
 		for(int i=0;i<a.length;i++)
 			UseLess.add(a[i]);
 		//exportCSV(new File("E:\\Java\\TravelPattern\\MobilityPattern\\input\\Zone\\GridMap.csv"));
-		//exportJSON(new File("E:\\DataVisual\\POIforSEEv160130\\json\\Afterchangetranszone.json"));
+		exportJSON(new File("E:\\DataVisual\\POIforSEEv160130\\json\\Afterchangetranszone.json"));
 	}
 }

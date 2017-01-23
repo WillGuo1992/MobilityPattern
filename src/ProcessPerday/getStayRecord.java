@@ -351,6 +351,7 @@ public class getStayRecord {
 		for(File file:goodRecordFiles){
 			importRawRecord(file);
 			calStayRecord();
+			calStayPointType(stayRecords);
 			stat();
 			exportStayRecord(file.getName());
 			//if(++j>=3)
