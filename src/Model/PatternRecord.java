@@ -7,6 +7,7 @@ import java.util.List;
 //出行模式点记录
 public class PatternRecord{
 	private Grid origin,destination;
+	private int routeNum;//路径选择偏好数量
 	private List<PatternPoint> routes_pref;
 	public PatternRecord(){
 		
@@ -27,6 +28,12 @@ public class PatternRecord{
 	}
 	public Grid getDestination(){
 		return destination;
+	}
+	public void setRouteNum(int routeNum){
+		this.routeNum = routeNum;
+	}
+	public int getRouteNum(){
+		return routeNum;
 	}
 	public List<PatternPoint> getRoutes_pref(){
 		return routes_pref;

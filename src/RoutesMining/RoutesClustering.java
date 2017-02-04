@@ -57,7 +57,7 @@ public class RoutesClustering {
 		
 	}
 	//评价指标计算
-	public static void calKPI() throws Exception{
+	public static void calRouteType() throws Exception{
 		
 	}
 	//导出ODRoutes

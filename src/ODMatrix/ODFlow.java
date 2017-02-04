@@ -96,6 +96,18 @@ public class ODFlow {
 		}
 	}
 	/*
+	 * 发现热点O区域
+	 */
+	public static void findHotOrigin(){
+		
+	}
+	/*
+	 * 发现热点D区域
+	 */
+	public static void findHotDestination(int Origin){
+		
+	}
+	/*
 	 * 输出OD总流量
 	 */
 	public static void exportODflow(String fileName)throws Exception{
