@@ -1,5 +1,7 @@
 package Model;
-
+/*
+ * 地图网格化类
+ */
 public class Grid {
 	private int id;
 	public double maxLon;
