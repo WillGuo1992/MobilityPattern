@@ -37,20 +37,20 @@ import Model.ZoneMap;
 public class ODSelection {
 	
 	//O-天通苑
-	public static final double OMaxLon = 116.442177;
-	public static final double OMinLon = 116.406162;
-	public static final double OMaxLat = 40.079664;
-	public static final double OMinLat = 40.061106;
+	public static double OMaxLon = 116.442177;
+	public static double OMinLon = 116.406162;
+	public static double OMaxLat = 40.079664;
+	public static double OMinLat = 40.061106;
 	//D-国贸
-	public static final double DMaxLon = 116.477652;
-	public static final double DMinLon = 116.450161;
-	public static final double DMaxLat = 39.913619;
-	public static final double DMinLat = 39.903507;
+	public static double DMaxLon = 116.477652;
+	public static double DMinLon = 116.450161;
+	public static double DMaxLat = 39.913619;
+	public static double DMinLat = 39.903507;
 	//R-Routes范围
-	public static final double RMaxLon = 116.548925;
-	public static final double RMinLon = 116.391873;
-	public static final double RMaxLat = 40.113943;
-	public static final double RMinLat = 39.893205;
+	public static double RMaxLon = 116.548925;
+	public static double RMinLon = 116.391873;
+	public static double RMaxLat = 40.113943;
+	public static double RMinLat = 39.893205;
 	
 	/*
 	//O-亚运村
