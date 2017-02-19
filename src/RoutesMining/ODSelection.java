@@ -18,6 +18,7 @@ import Model.RawPoint;
 import Model.RawRecord;
 import Model.StayPoint;
 import Model.StayRecord;
+import Model.ZoneMap;
 
 /*
  * author:youg
@@ -349,7 +350,9 @@ public class ODSelection {
 		}//every day
 		*/
 		//statUserDay("All20Days_tiantongyuan_guomao170105test.txt");
-		statAccNumDay("All20Days_tiantongyuan_guomao170105test.txt");
+		//statAccNumDay("All20Days_tiantongyuan_guomao170105test.txt");
+		ZoneMap map = new ZoneMap();
+		map.init();
 		System.out.println("finish");
 	}
 }

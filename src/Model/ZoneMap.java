@@ -19,7 +19,12 @@ public class ZoneMap {
 	}
 	//初始化，载入交通小区数据
 	public void init()throws Exception{
-		BufferedReader br = new BufferedReader(new FileReader(".\\input\\Zone\\GridMap.csv"));
+		BufferedReader br = new BufferedReader(new FileReader(".\\input\\Zone\\ZoneMap.txt"));
+		String af;
+		String[] afs;
+		while((af=br.readLine())!=null){
+			
+		}
 		br.close();
 	}
 	public List<Zone> getZoneList(){
