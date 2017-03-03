@@ -21,7 +21,7 @@ import Model.StayRecord;
 /*
  * author:youg
  * date:20160621
- * 使用DBSCANtorTrip算法对trips进行聚类，生成routes
+ * 使用DBSCANtorTrip算法对ODtrajs进行聚类，生成RoutesCluster
  * 0raw:原始信令数据，不包含经纬度信息，按时间划分文件
  * 1fixed:添加经纬度信息，按id后两位划分文件，文件内按id和时间排序
  * 2timeSpan:记录每个ID每天最早出现的时间和位置以及最晚出现的时间和位置

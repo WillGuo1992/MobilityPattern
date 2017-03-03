@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Program_Config>
-<date>20141103</date>
+<date>20141106</date>
 <workPath>K:\BJMoblieCellData2014</workPath>
-<patternPath>K:\BJmobilePattern2014</patternPath>
+<patternPath>K:\BJMobilityPattern2014</patternPath>
 <baseFile>F:\basemap\BJbase_cellidcn.txt</baseFile>
 <idLength>18</idLength>
 <cityMaxLon>117.505625</cityMaxLon>

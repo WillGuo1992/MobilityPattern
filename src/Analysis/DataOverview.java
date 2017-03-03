@@ -52,6 +52,7 @@ public class DataOverview {
 		map = new HashMap<String,Double>();
 		File[] fixedFiles = fixedPath.listFiles();
 		double maxValue=0.0;
+		int fileCount=0;
 		for(File file:fixedFiles){
 			System.out.println("Now heatMaping "+file.getAbsolutePath());
 			br = new BufferedReader(new FileReader(file));
@@ -76,9 +77,59 @@ public class DataOverview {
 					map.put(pos, 1.0);
 			}
 			br.close();
-			break;
+			if(++fileCount>5)
+				break;
 		}
 		maxValue/=10;
+		for(String key:map.keySet()){
+			double val = map.get(key);
+			if(val>maxValue-0.0000001)
+				val=1.0;
+			else
+				val/=maxValue;
+			map.put(key, val);
+		}
+	}
+	//居住地工作地热力图
+	public static void heatHomeWork(File stayRecordPath)throws Exception{
+		map = new HashMap<String,Double>();
+		File[] fixedFiles = stayRecordPath.listFiles();
+		double maxValue=0.0;
+		int fileCount=0;
+		for(File file:fixedFiles){
+			System.out.println("Now heatHomeWorking "+file.getAbsolutePath());
+			br = new BufferedReader(new FileReader(file));
+			String af;
+			String[] afs;
+			while((af=br.readLine())!=null){
+				afs = af.split(",");
+				double lon = Double.valueOf(afs[3]);
+				double lat = Double.valueOf(afs[4]);
+				//判断居住地
+				if(!afs[6].equals("1"))
+					continue;
+				//判断工作地
+				//if(!afs[6].equals("2"))
+				//	continue;
+				if(lon<minLon || lon>maxLon || lat<minLat || lat>maxLat)
+					continue;
+				lon = ((int)(lon*1000000)/10000+0.5)/100.0;
+				lat = ((int)(lat*1000000)/10000+0.5)/100.0;
+				String pos = df.format(lon)+","+df.format(lat);
+				if(map.containsKey(pos)){
+					double val = map.get(pos)+1.0;
+					map.put(pos, val);
+					if(val>maxValue)
+						maxValue=val;
+				}
+				else
+					map.put(pos, 1.0);
+			}
+			br.close();
+			if(++fileCount>5)
+				break;
+		}
+		maxValue/=1.2;
 		for(String key:map.keySet()){
 			double val = map.get(key);
 			if(val>maxValue-0.0000001)
@@ -92,6 +143,7 @@ public class DataOverview {
 	public static void recordNum(File fixedPath)throws Exception{
 		rcdNum = new int[102];
 		File[] fixedFiles = fixedPath.listFiles();
+		int fileCount=0;
 		for(File file:fixedFiles){
 			System.out.println("Now recordNuming "+file.getAbsolutePath());
 			br = new BufferedReader(new FileReader(file));
@@ -100,28 +152,30 @@ public class DataOverview {
 			while((af=br.readLine())!=null){
 				af = af.substring(0,idLength);
 				if(lastAf!=null && !af.equals(lastAf)){
-					//value/=5;
-					if(value<101)
+					value/=10;
+					if(value<5)
 						rcdNum[value]+=1;
 					else
-						rcdNum[101]+=1;
+						rcdNum[5]+=1;
 					value=0;
 				}
 				value+=1;
 				lastAf=af;
 			}
 			br.close();
-			//break;
+			if(++fileCount>5)
+				break;
 		}
 		for(int i=0;i<rcdNum.length;i++){
 			System.out.println(i+":"+rcdNum[i]);
 		}
 	}
-	//更新周期分布(0,10),(10,30),(30,60),(60,120),(120,)
+	//更新周期分布(0,5),(5,10),(10,30),(30,60),(60,120),(120,)
 	public static void updatePeriod(File fixedPath)throws Exception{
 		updNum = new int[122];
 		File[] fixedFiles = fixedPath.listFiles();
 		int worse=0;
+		int fileCount=0;
 		for(File file:fixedFiles){
 			System.out.println("Now updatePerioding "+file.getAbsolutePath());
 			br = new BufferedReader(new FileReader(file));
@@ -163,7 +217,8 @@ public class DataOverview {
 				lastAf=af;
 			}
 			br.close();
-			//break;
+			if(++fileCount>5)
+				break;
 		}
 		for(int i=0;i<updNum.length;i++)
 			System.out.println(updNum[i]);
@@ -223,42 +278,58 @@ public class DataOverview {
 	}
 	//生成json文件
 	public static void generateJson(String fileName)throws Exception{
+		int ccc;
 		System.out.println("now generateJsoning "+fileName);
-		bw = new BufferedWriter(new FileWriter(fileName));
-		bw.write("var geodata = [\n");
-		for(String pos:map.keySet())
-			bw.write("["+pos+"],\n");
-		bw.write("];\n");
-		
-		bw.write("var heatdate = [\n");
-		for(String pos:map.keySet())
-			bw.write("["+pos+","+df.format(map.get(pos))+"],\n");
-		bw.write("];\n");
-		
-		bw.write("var count_legend_data = ['0~5','5~10','10~15','15~20','20~25','25~30','30~35','35~40','40~45','45~50','50~'];\n");
-		bw.write("var count_data = [\n");
-		bw.write("{value:"+rcdNum[0]+",name:'0~5'},\n");
-		bw.write("{value:"+rcdNum[1]+",name:'5~10'},\n");
-		bw.write("{value:"+rcdNum[2]+",name:'10~15'},\n");
-		bw.write("{value:"+rcdNum[3]+",name:'15~20'},\n");
-		bw.write("{value:"+rcdNum[4]+",name:'20~25'},\n");
-		bw.write("{value:"+rcdNum[5]+",name:'25~30'},\n");
-		bw.write("{value:"+rcdNum[6]+",name:'30~35'},\n");
-		bw.write("{value:"+rcdNum[7]+",name:'35~40'},\n");
-		bw.write("{value:"+rcdNum[8]+",name:'40~45'},\n");
-		bw.write("{value:"+rcdNum[9]+",name:'45~50'},\n");
-		bw.write("{value:"+rcdNum[10]+",name:'50~'},\n");
-		bw.write("];\n");
-		
-		bw.write("var update_legend_data = ['0~10','10~30','30~60','60~120','120~'];\n");
-		bw.write("var update_data = [\n");
-		bw.write("{value:"+updNum[0]+",name:'0~10'},\n");
-		bw.write("{value:"+updNum[0]+",name:'10~30'},\n");
-		bw.write("{value:"+updNum[0]+",name:'30~60'},\n");
-		bw.write("{value:"+updNum[0]+",name:'60~120'},\n");
-		bw.write("{value:"+updNum[0]+",name:'120~'},\n");
-		bw.write("];\n");
-		
+		bw = new BufferedWriter(new FileWriter(fileName+"\\heat_home.json"));
+		System.out.println("Now generating:"+fileName+"\\heat_home.json");
+		bw.write("{\"heatdata\":[\n");
+		ccc=0;
+		for(String pos:map.keySet()){
+			if(ccc++==0)
+				bw.write("["+pos+","+df.format(map.get(pos))+"]");
+			else
+				bw.write(",\n["+pos+","+df.format(map.get(pos))+"]");
+		}
+		bw.write("\n]\n}\n");
+		bw.close();
+		/*
+		bw = new BufferedWriter(new FileWriter(fileName+"\\heat.json"));
+		System.out.println("Now generating:"+fileName+"\\heat.json");
+		bw.write("{\"heatdata\":[\n");
+		ccc=0;
+		for(String pos:map.keySet()){
+			if(ccc++==0)
+				bw.write("["+pos+","+df.format(map.get(pos))+"]");
+			else
+				bw.write(",\n["+pos+","+df.format(map.get(pos))+"]");
+		}
+		bw.write("\n]\n}\n");
+		bw.close();
+		bw = new BufferedWriter(new FileWriter(fileName+"\\count.json"));
+		System.out.println("Now generating:"+fileName+"\\count.json");
+		bw.write("{\n\t\"count_legend_data\":[\"0~10\",\"10~20\",\"20~30\",\"30~40\",\"40~50\",\"50~\"],\n");
+		bw.write("\t\"count_data\":[\n");
+		bw.write("\t\t{\"value\":"+rcdNum[0]+",\"name\":\"0~10\"},\n");
+		bw.write("\t\t{\"value\":"+rcdNum[1]+",\"name\":\"10~20\"},\n");
+		bw.write("\t\t{\"value\":"+rcdNum[2]+",\"name\":\"20~30\"},\n");
+		bw.write("\t\t{\"value\":"+rcdNum[3]+",\"name\":\"30~40\"},\n");
+		bw.write("\t\t{\"value\":"+rcdNum[4]+",\"name\":\"40~50\"},\n");
+		bw.write("\t\t{\"value\":"+rcdNum[5]+",\"name\":\"50~\"}\n");
+		bw.write("\t]\n}");
+		bw.close();
+		bw = new BufferedWriter(new FileWriter(fileName+"\\update.json"));
+		System.out.println("Now generating:"+fileName+"\\update.json");
+		bw.write("{\n\t\"update_legend_data\":[\"0~5\",\"5~10\",\"10~30\",\"30~60\",\"60~120\",\"120~\"],\n");
+		bw.write("\t\"update_data\":[\n");
+		bw.write("\t\t{\"value\":"+updNum[0]+",\"name\":\"0~5\"},\n");
+		bw.write("\t\t{\"value\":"+updNum[1]+",\"name\":\"5~10\"},\n");
+		bw.write("\t\t{\"value\":"+updNum[2]+",\"name\":\"10~30\"},\n");
+		bw.write("\t\t{\"value\":"+updNum[3]+",\"name\":\"30~60\"},\n");
+		bw.write("\t\t{\"value\":"+updNum[4]+",\"name\":\"60~120\"},\n");
+		bw.write("\t\t{\"value\":"+updNum[5]+",\"name\":\"120~\"}\n");
+		bw.write("\t]\n}");
+		bw.close();
+		/*
 		bw.write("var line_data = [");
 		for(int i=0;i<24;i++)
 			bw.write(perhNum[i]+",");
@@ -268,8 +339,8 @@ public class DataOverview {
 		for(int i=0;i<24;i++)
 			bw.write(userNum[i]+",");
 		bw.write("];\n");
-		
 		bw.close();
+		*/
 	}
 	//寻找基站跳变实例
 	public static void findJitter(File fixedPath)throws Exception{
@@ -354,12 +425,13 @@ public class DataOverview {
 		idLength = Integer.valueOf(Config.getAttr(Config.IdLength));
 		//userAndRecord(new File(Config.getAttr(Config.FixedPath)));
 		//heatMap(new File(Config.getAttr(Config.FixedPath)));
+		heatHomeWork(new File(Config.getAttr(Config.StayRecordPath)));
 		//recordNum(new File(Config.getAttr(Config.FixedPath)));
 		//updatePeriod(new File(Config.getAttr(Config.FixedPath)));
 		//numPerhour(new File(Config.getAttr(Config.FixedPath)));
 		//userPerhour(new File(Config.getAttr(Config.FixedPath)));
-		findJitter(new File(Config.getAttr(Config.FixedPath)));
-		//generateJson("F:\\sample\\phone_heat_data_"+Config.getAttr(Config.Date)+".json");
+		//findJitter(new File(Config.getAttr(Config.FixedPath)));
+		generateJson("E:\\DataVisual\\dv\\data\\date\\"+Config.getAttr(Config.Date));
 		
 		System.out.println("finish");
 	}

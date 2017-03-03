@@ -17,10 +17,10 @@ public class ZoneMap {
 	public double minLat;
 	public ZoneMap(){
 		zoneList = new ArrayList<Zone>();
-		maxLon = Double.MAX_VALUE;
-		minLon = Double.MIN_VALUE;
-		maxLat = Double.MAX_VALUE;
-		minLat = Double.MIN_VALUE;
+		maxLon = Double.MIN_VALUE;
+		minLon = Double.MAX_VALUE;
+		maxLat = Double.MIN_VALUE;
+		minLat = Double.MAX_VALUE;
 		num=0;
 	}
 	//初始化，载入交通小区数据
@@ -33,7 +33,10 @@ public class ZoneMap {
 			afs = af.split(",");
 			Zone newZone = new Zone(Integer.parseInt(afs[0]));
 			newZone.num = Integer.parseInt(afs[4]);
-			for(int i=0;i<newZone.num;i+=2){
+			newZone.area = Double.parseDouble(afs[1]);
+			newZone.length = Double.parseDouble(afs[2]);
+			newZone.name = afs[3];
+			for(int i=0;i<newZone.num*2;i+=2){
 				double newLon = Double.parseDouble(afs[5+i]);
 				double newLat = Double.parseDouble(afs[6+i]);
 				newZone.lons.add(newLon);
@@ -54,9 +57,9 @@ public class ZoneMap {
 					this.maxLat = newLat;
 				if(newLat<this.minLat)
 					this.minLat = newLat;
-				this.zoneList.add(newZone);
-				num+=1;
 			}
+			this.zoneList.add(newZone);
+			num+=1;
 		}
 		br.close();
 		System.out.println("Finish init...");
@@ -73,8 +76,10 @@ public class ZoneMap {
 	}
 	//通过经纬度找到所在网格
 	public Zone getZoneByPos(double lon,double lat){
+		if(lon>this.maxLon || lon<this.minLon || lat>this.maxLat || lat<this.minLat)
+			return null;
 		for(Zone zone:zoneList)
-			if(lon>=zone.lons.get(0) && lon<=zone.lons.get(1) && lat>=zone.lats.get(0) && lat<=zone.lats.get(1))
+			if(zone.Contains(lon, lat))
 				return zone;
 		return null;
 	}

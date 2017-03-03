@@ -34,7 +34,10 @@ public class Config {
 	public static final String ODRoutesPath = "9ODRoutes";
 	public static final String Temp_Logs = "Temp_Logs";
 	//PatternPath子目录
-	public static final String PatternRecordPath = "0patternRecord";
+	public static final String PatternRecordPath = "0patternRecord";//暂时不用
+	public static final String ODTrajPath = "1ODTraj";
+	public static final String RoutesClusterPath = "2RotuesCluster";
+	public static final String RoutesPattern = "3RoutesPattern";
 	
 	private static final String[] configKeys = {
 		Date,
@@ -60,7 +63,10 @@ public class Config {
 		ODRoutesPath
 	};
 	private static final String[] PatternPathGenerateKeys = {
-		PatternRecordPath
+		PatternRecordPath,
+		ODTrajPath,
+		RoutesClusterPath,
+		RoutesPattern
 	};
 	private static Map<String, String> configs = new HashMap<String, String>();
 	private static String contextPath = ".";
@@ -105,7 +111,7 @@ public class Config {
         	configs.put(key, value);
         }
         for(String key:PatternPathGenerateKeys){
-        	String value = configs.get(PatternPath)+File.separator+configs.get(Date)+File.separator+key;
+        	String value = configs.get(PatternPath)+File.separator+key;
         	configs.put(key, value);
         }
         return ret;
