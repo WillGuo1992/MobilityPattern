@@ -14,7 +14,7 @@ public class ClusterAnalysis {
              List<DataPoint> arrivableObjects=isKeyAndReturnObjects(dp,dataPoints,radius,ObjectNum);
              if(arrivableObjects!=null){
                   Cluster tempCluster=new Cluster();
-                  tempCluster.setClusterName("Cluster "+i);
+                  tempCluster.setClusterName("Cluster_"+i);
                   tempCluster.setDataPoints(arrivableObjects);
                   clusterList.add(tempCluster);
              }

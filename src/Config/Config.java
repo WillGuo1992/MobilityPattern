@@ -36,7 +36,7 @@ public class Config {
 	//PatternPath子目录
 	public static final String PatternRecordPath = "0patternRecord";//暂时不用
 	public static final String ODTrajPath = "1ODTraj";
-	public static final String RoutesClusterPath = "2RotuesCluster";
+	public static final String RoutesClusterPath = "2RoutesCluster";
 	public static final String RoutesPattern = "3RoutesPattern";
 	
 	private static final String[] configKeys = {

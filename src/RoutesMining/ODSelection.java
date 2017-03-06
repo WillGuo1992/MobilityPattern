@@ -385,10 +385,10 @@ public class ODSelection {
 				dZoneList.add(dZ);
 			}
 		}
-		RMaxLon+=0.04;
-		RMinLon-=0.04;
-		RMaxLat+=0.04;
-		RMinLat-=0.04;
+		RMaxLon+=0.01;
+		RMinLon-=0.01;
+		RMaxLat+=0.01;
+		RMinLat-=0.01;
 		if(oZoneList==null || oZoneList.size()<1 || dZoneList==null || dZoneList.size()<1){
 			System.out.println("input zone id error...\nexit");
 			return;
@@ -402,8 +402,8 @@ public class ODSelection {
 		int days = 0;
 		
 		for(File file:datePath){
-			if(++days<10)
-				continue;
+			//if(++days<10)
+			//	continue;
 			File stayRecordPath = new File(file.getAbsolutePath()+"\\7stayRecord");
 			System.out.println(stayRecordPath.getAbsolutePath());
 			File[] stayRecordFiles = stayRecordPath.listFiles();

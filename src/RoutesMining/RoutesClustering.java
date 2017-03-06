@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import Config.Config;
 import DBSCANforTrip.Cluster;
@@ -17,6 +18,7 @@ import DBSCANforTrip.ClusterAnalysis;
 import DBSCANforTrip.DataPoint;
 import Model.StayPoint;
 import Model.StayRecord;
+import Model.ZoneMap;
 
 /*
  * author:youg
@@ -34,10 +36,10 @@ public class RoutesClustering {
 	public static BufferedReader br;
 	public static BufferedWriter bw;
 	public static Map<String,StayRecord> map = new HashMap<String,StayRecord>();
-	//载入停留点数据
-	public static void importStayRecord(File goodRecordFile)throws Exception{
-		System.out.println("Now importing "+goodRecordFile.getAbsolutePath());
-		br = new BufferedReader(new FileReader(goodRecordFile));
+	//载入OD轨迹数据
+	public static void importStayRecord(File ODRecordFile)throws Exception{
+		System.out.println("Now importing "+ODRecordFile.getAbsolutePath());
+		br = new BufferedReader(new FileReader(ODRecordFile));
 		String af;
 		String[] afs;
 		while((af=br.readLine())!=null){
@@ -52,13 +54,13 @@ public class RoutesClustering {
 		}
 		br.close();
 	}
-	//轨迹聚类
+	//
 	public static void cluster() throws Exception{
 		
 	}
-	//评价指标计算
-	public static void calRouteType() throws Exception{
-		
+	//
+	public static int calRouteType() throws Exception{
+		return 0;
 	}
 	//导出ODRoutes
 	public static void exportODRoutes(List<Cluster> clusterList,File ODRoutesPath)throws Exception{
@@ -77,16 +79,49 @@ public class RoutesClustering {
             }
         }
 	}
+	//导出出行RoutesPattern
+	public static void exportRoutesPattern(File ODRoutesPath, File RoutesPatternPath){
+		
+	}
 	public static void main(String[] args)throws Exception{
 		Config.init();
+		ZoneMap zoneMap = new ZoneMap();
+		zoneMap.init();
+		Scanner cin = new Scanner(System.in);
+		System.out.println("Input Origin zone:");
+		int oZone = cin.nextInt();
+		System.out.println("input Destination zone:");
+		int dZone = cin.nextInt();
 		List<DataPoint> dpoints = new LinkedList<DataPoint>();
 		//String ODRecordFileName = Config.getAttr(Config.ODRecordPath)+"\\moreThan40Out.txt";
 		//String ODRoutesPathName = Config.getAttr(Config.ODRoutesPath)+"\\";
 		//File ODRecordFile = new File(ODRecordFileName);
-		File ODRecordFile = new File("K:\\BJmobilePattern2014\\tongzhou_zhongguancun_new.txt");
+		String ODRecordFileName = Config.getAttr(Config.ODTrajPath)+File.separator+String.valueOf(oZone)+"_"+String.valueOf(dZone)+".txt";
+		String ODRoutesPathName = Config.getAttr(Config.RoutesClusterPath)+File.separator+String.valueOf(oZone)+"_"+String.valueOf(dZone);
+		String RoutesPatternPathName = Config.getAttr(Config.RoutesPattern)+File.separator+String.valueOf(oZone)+"_"+String.valueOf(dZone);
+		//File ODRecordFile = new File("K:\\BJmobilePattern2014\\tongzhou_zhongguancun_new.txt");
+		File ODRecordFile = new File(ODRecordFileName);
+		if(!ODRecordFile.isFile()){
+			System.out.println("input error");
+			return;
+		}
 		//File ODRoutesPath = new File(ODRoutesPathName);
-		File ODRoutesPath = new File("K:\\BJmobilePattern2014\\tongzhou_zhongguancun\\bad");
-		
+		//File ODRoutesPath = new File("K:\\BJmobilePattern2014\\tongzhou_zhongguancun\\bad");
+		File ODRoutesPath = new File(ODRoutesPathName);
+		//System.out.println(ODRoutesPath.getAbsolutePath());
+		if(!ODRoutesPath.exists() || !ODRoutesPath.isDirectory()){
+			ODRoutesPath.mkdir();
+		}
+		File[] delFiles = ODRoutesPath.listFiles();
+		for(File del:delFiles)
+			del.delete();
+		File RoutesPatternPath = new File(RoutesPatternPathName);
+		if(!RoutesPatternPath.exists() || !RoutesPatternPath.isDirectory()){
+			RoutesPatternPath.mkdir();
+		}
+		delFiles = RoutesPatternPath.listFiles();
+		for(File del:delFiles)
+			del.delete();
 		importStayRecord(ODRecordFile);
 		int k=0;
 		for(String user:map.keySet()){
@@ -109,9 +144,10 @@ public class RoutesClustering {
 			return;
 		*/
 		ClusterAnalysis ca = new ClusterAnalysis();
-		List<Cluster> clusterList = ca.doDbscanAnalysis(dpoints, 1500, 2);
+		List<Cluster> clusterList = ca.doDbscanAnalysis(dpoints, 1200, 2);
 		int nc = ca.displayCluster(clusterList);
 		System.out.println("Number of Cluster:"+nc);
 		exportODRoutes(clusterList,ODRoutesPath);
+		exportRoutesPattern(ODRoutesPath,RoutesPatternPath);
 	}
 }

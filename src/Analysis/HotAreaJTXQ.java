@@ -28,11 +28,11 @@ import Model.ZoneMap;
  */
 public class HotAreaJTXQ {
 	public static DecimalFormat df = new DecimalFormat("#0.000000");
-	/*public static void main(String[] args)throws Exception{
+	public static void main(String[] args)throws Exception{
 		//BufferedReader br = new BufferedReader(new FileReader("K:\\HotArea\\TransZone461.txt"));
 		//br.close();
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("K:\\HotArea\\TransZone461.txt"),"GBK"));
-		BufferedWriter bw = new BufferedWriter(new FileWriter("E:\\DataVisual\\dv\\data\\date\\20130225\\matrix.json"));
+		BufferedWriter bw = new BufferedWriter(new FileWriter("E:\\DataVisual\\dv\\data\\date\\20141101\\matrix_static.json"));
 		String af;
 		String[] afs;
 		bw.write("[\n");
@@ -63,7 +63,8 @@ public class HotAreaJTXQ {
 		bw.close();
 		br.close();
 	}
-	*/
+	
+	/*
 	public static void main(String[] args)throws Exception{
 		//目录初始化，交通小区初始化
 		Config.init();
@@ -173,12 +174,14 @@ public class HotAreaJTXQ {
 			int id = z.id-1;
 			int dt = Integer.parseInt(afs[2].substring(0, 2));
 			int ot = Integer.parseInt(afs[2].substring(7, 9));
+			System.out.println(afs[2]+"~"+dt+"~"+ot);
 			if(ot<24)
 				OrigHot[id][ot]+=1;
 			if(dt<24)
 				DestHot[id][dt]+=1;
 		}
 		br.close();
+		/*
 		BufferedWriter bw;
 		bw = new BufferedWriter(new FileWriter("K:\\OriginHot.csv"));
 		for(int i=0;i<OrigHot.length;i++){
@@ -196,6 +199,8 @@ public class HotAreaJTXQ {
 			bw.write("\n");
 		}
 		bw.close();
+		
 		System.out.println("finish");
 	}
+*/
 }
