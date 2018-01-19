@@ -1,17 +1,12 @@
 package Fix;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import Config.Config;
+
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import Config.Config;
 
 /*
  * author:youg
@@ -329,7 +324,7 @@ public class BJmobile2014 {
 		
 		File rawPath = new File(Config.getAttr(Config.RawPath));
 		File[] rawFiles = rawPath.listFiles();
-		/*
+
 		//生成输出目录
 		mkDir(fileNames_100,Config.getAttr(Config.FixedPath));
 		//读取基站位置数据
@@ -338,10 +333,10 @@ public class BJmobile2014 {
 		for(File file:rawFiles){
 			splitFile(file);
 		}
-		*/
+
 		File fixedPath = new File(Config.getAttr(Config.FixedPath));
 		File[] fixedFiles = fixedPath.listFiles();
-		/*
+
 		//按id和timestamp排序
 		for(File file:fixedFiles){
 			sortByIdTime(file);
@@ -352,7 +347,7 @@ public class BJmobile2014 {
 		for(File file:fixedFiles){
 			deleteRepeat(file);
 		}
-		*/
+
 		//修复基站抖动数据
 		for(File file:fixedFiles){
 			repairJitter(file);

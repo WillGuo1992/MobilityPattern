@@ -1,16 +1,12 @@
 package ProcessPerday;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import Config.Config;
+
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import Config.Config;
 
 /*
  * author:youg
@@ -148,7 +144,7 @@ public class getGoodUser {
 			String[] afList;
 			while((af=br.readLine())!=null){
 				afList = af.split(",");
-				thisUser = af.substring(0,19);
+				thisUser = afList[0];
 				if(!thisUser.equals(lastUser)){
 					if(lastUser!=null){
 						//存入文件

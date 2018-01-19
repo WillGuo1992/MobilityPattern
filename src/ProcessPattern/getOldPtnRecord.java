@@ -1,16 +1,5 @@
 package ProcessPattern;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import Config.Config;
 import DBSCAN.Cluster;
 import DBSCAN.ClusterAnalysis;
@@ -18,6 +7,12 @@ import DBSCAN.DataPoint;
 import Model.OldPtnPoint;
 import Model.OldPtnRecord;
 import Model.StayPoint;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.util.*;
 /*
  * author:youg
  * date:20160504
@@ -35,6 +30,7 @@ import Model.StayPoint;
 @Deprecated
 public class getOldPtnRecord {
 	public static int total=0;
+
 	public static int single=0;
 	public static Map<String,List<DataPoint>> map;//存储（id,多日停留点序列）对
 	@Deprecated

@@ -1,17 +1,13 @@
 package Analysis;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import Config.Config;
+
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import Config.Config;
 
 public class DataOverview {
 	public static BufferedReader br;
@@ -423,15 +419,16 @@ public class DataOverview {
 		maxLat = Double.valueOf(Config.getAttr(Config.CityMaxLat));
 		minLat = Double.valueOf(Config.getAttr(Config.CityMinLat));
 		idLength = Integer.valueOf(Config.getAttr(Config.IdLength));
-		//userAndRecord(new File(Config.getAttr(Config.FixedPath)));
+		userAndRecord(new File(Config.getAttr(Config.FixedPath)));
 		//heatMap(new File(Config.getAttr(Config.FixedPath)));
-		heatHomeWork(new File(Config.getAttr(Config.StayRecordPath)));
+		//heatHomeWork(new File(Config.getAttr(Config.StayRecordPath)));
 		//recordNum(new File(Config.getAttr(Config.FixedPath)));
 		//updatePeriod(new File(Config.getAttr(Config.FixedPath)));
 		//numPerhour(new File(Config.getAttr(Config.FixedPath)));
 		//userPerhour(new File(Config.getAttr(Config.FixedPath)));
 		//findJitter(new File(Config.getAttr(Config.FixedPath)));
-		generateJson("E:\\DataVisual\\dv\\data\\date\\"+Config.getAttr(Config.Date));
+
+		//generateJson("E:\\DataVisual\\dv\\data\\date\\"+Config.getAttr(Config.Date));
 		
 		System.out.println("finish");
 	}

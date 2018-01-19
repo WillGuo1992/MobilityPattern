@@ -5,49 +5,48 @@ import java.util.List;
 
 public class ClusterAnalysis {
     public List<Cluster> doDbscanAnalysis(List<DataPoint> dataPoints,
-            double radius, int ObjectNum) {
-         List<Cluster> clusterList=new ArrayList<Cluster>();
-         for(int i=0; i<dataPoints.size();i++){
-             DataPoint dp=dataPoints.get(i);
-             List<DataPoint> arrivableObjects=isKeyAndReturnObjects(dp,dataPoints,radius,ObjectNum);
-             if(arrivableObjects!=null){
-                  Cluster tempCluster=new Cluster();
-                  tempCluster.setClusterName("Cluster "+i);
-                  tempCluster.setDataPoints(arrivableObjects);
-                  clusterList.add(tempCluster);
-             }
-         }
+                                          double radius, int ObjectNum) {
+        List<Cluster> clusterList = new ArrayList<Cluster>();
+        for (int i = 0; i < dataPoints.size(); i++) {
+            DataPoint dp = dataPoints.get(i);
+            List<DataPoint> arrivableObjects = isKeyAndReturnObjects(dp, dataPoints, radius, ObjectNum);
+            if (arrivableObjects != null) {
+                Cluster tempCluster = new Cluster();
+                tempCluster.setClusterName("Cluster " + i);
+                tempCluster.setDataPoints(arrivableObjects);
+                clusterList.add(tempCluster);
+            }
+        }
 
-         for(int i=0;i<clusterList.size();i++){
-             for(int j=0;j<clusterList.size();j++){
-                  if(i!=j){
-                      Cluster clusterA=clusterList.get(i);
-                      Cluster clusterB=clusterList.get(j);
+        for (int i = 0; i < clusterList.size(); i++) {
+            for (int j = 0; j < clusterList.size(); j++) {
+                if (i != j) {
+                    Cluster clusterA = clusterList.get(i);
+                    Cluster clusterB = clusterList.get(j);
 
-                      List<DataPoint> dpsA=clusterA.getDataPoints();
-                      List<DataPoint> dpsB=clusterB.getDataPoints();
+                    List<DataPoint> dpsA = clusterA.getDataPoints();
+                    List<DataPoint> dpsB = clusterB.getDataPoints();
 
-                      boolean flag=mergeList(dpsA,dpsB);
-                      if(flag){
-                          clusterList.set(j, new Cluster());
-                      }
-                  }
-             }
-         }
+                    boolean flag = mergeList(dpsA, dpsB);
+                    if (flag) {
+                        clusterList.set(j, new Cluster());
+                    }
+                }
+            }
+        }
 
-         return clusterList;
+        return clusterList;
     }
 
-   
 
-    public int displayCluster(List<Cluster> clusterList){
-    	int num=0;
-        if(clusterList!=null){
-            for(Cluster tempCluster:clusterList){
-                if(tempCluster.getDataPoints()!=null&&tempCluster.getDataPoints().size()>0){
-                	num+=1;
-                    System.out.println("----------"+tempCluster.getClusterName()+"----------");
-                    for(DataPoint dp:tempCluster.getDataPoints()){
+    public int displayCluster(List<Cluster> clusterList) {
+        int num = 0;
+        if (clusterList != null) {
+            for (Cluster tempCluster : clusterList) {
+                if (tempCluster.getDataPoints() != null && tempCluster.getDataPoints().size() > 0) {
+                    num += 1;
+                    System.out.println("----------" + tempCluster.getClusterName() + "----------");
+                    for (DataPoint dp : tempCluster.getDataPoints()) {
                         System.out.println(dp.getDataPointName());
                     }
                 }
@@ -57,95 +56,96 @@ public class ClusterAnalysis {
         return num;
     }
 
-   
-    private double getDistance(DataPoint dp1,DataPoint dp2){
-        double distance=0.0;
+
+    private double getDistance(DataPoint dp1, DataPoint dp2) {
+        double distance = 0.0;
         //double[] dim1=dp1.getDimensioin();
         //double[] dim2=dp2.getDimensioin();
         double lon1 = dp1.getLon();
         double lat1 = dp1.getLat();
         double lon2 = dp2.getLon();
         double lat2 = dp2.getLat();
-        distance = distanceInGlobal(lon1,lat1,lon2,lat2);
+        distance = distanceInGlobal(lon1, lat1, lon2, lat2);
         return distance;
     }
+
     /*
-	 * 计算两位置之间的距离，根据球面坐标长度公式计算(单位：米)
+     * 计算两位置之间的距离，根据球面坐标长度公式计算(单位：米)
 	 * 注意，这个计算很耗时间,另外,这个计算把经纬度的100万倍还原了!
 	 */
-    public static double distanceInGlobal(double lon1, double lat1, double lon2, double lat2){
-		double x1 = lon1;
-		double y1 = lat1;
-		double x2 = lon2;
-		double y2 = lat2;
+    public static double distanceInGlobal(double lon1, double lat1, double lon2, double lat2) {
+        double x1 = lon1;
+        double y1 = lat1;
+        double x2 = lon2;
+        double y2 = lat2;
 
-		double L = (3.1415926*6370/180)*Math.sqrt((Math.abs((x1)-(x2)))*(Math.abs((x1)-(x2)))*(Math.sin((90-(y1))*(3.1415926/180)))*(Math.sin((90-(y1))*(3.1415926/180)))+(Math.abs((y1)-(y2)))*(Math.abs((y1)-(y2))));
-		return L * 1000;
-	}
-   
-   private List<DataPoint> isKeyAndReturnObjects(DataPoint dataPoint,List<DataPoint> dataPoints,double radius,int ObjectNum){
-       List<DataPoint> arrivableObjects=new ArrayList<DataPoint>(); //用来存储所有直接密度可达对象
+        double L = (3.1415926 * 6370 / 180) * Math.sqrt((Math.abs((x1) - (x2))) * (Math.abs((x1) - (x2))) * (Math.sin((90 - (y1)) * (3.1415926 / 180))) * (Math.sin((90 - (y1)) * (3.1415926 / 180))) + (Math.abs((y1) - (y2))) * (Math.abs((y1) - (y2))));
+        return L * 1000;
+    }
 
-       for(DataPoint dp:dataPoints){
-          double distance=getDistance(dataPoint,dp);
-          if(distance<=radius){
-              arrivableObjects.add(dp);
-          }
-       }
+    private List<DataPoint> isKeyAndReturnObjects(DataPoint dataPoint, List<DataPoint> dataPoints, double radius, int ObjectNum) {
+        List<DataPoint> arrivableObjects = new ArrayList<DataPoint>(); //用来存储所有直接密度可达对象
 
-       if(arrivableObjects.size()>=ObjectNum){
-           dataPoint.setKey(true);
-           return arrivableObjects;
-       }
+        for (DataPoint dp : dataPoints) {
+            double distance = getDistance(dataPoint, dp);
+            if (distance <= radius) {
+                arrivableObjects.add(dp);
+            }
+        }
 
-       return null;
-   }
+        if (arrivableObjects.size() >= ObjectNum) {
+            dataPoint.setKey(true);
+            return arrivableObjects;
+        }
 
-  
-   private boolean isContain(DataPoint dp,List<DataPoint> dps){
-      boolean flag=false;
-      String name=dp.getDataPointName().trim();
-      for(DataPoint tempDp:dps){
-         String tempName=tempDp.getDataPointName().trim();
-         if(name.equals(tempName)){
-             flag=true;
-             break;
-         }
-      }
-
-      return flag;
-   }
-
-  
-   private boolean mergeList(List<DataPoint> dps1,List<DataPoint> dps2){
-       boolean flag=false;
-
-       if(dps1==null||dps2==null||dps1.size()==0||dps2.size()==0){
-           return flag;
-       }
-
-       for(DataPoint dp:dps2){
-          if(dp.isKey()&&isContain(dp,dps1)){
-             flag=true;
-             break;
-          }
-       }
-
-       if(flag){
-           for(DataPoint dp:dps2){
-              if(!isContain(dp,dps1)){
-                  DataPoint tempDp=new DataPoint(dp);
-                  dps1.add(tempDp);
-              }
-           }
-       }
+        return null;
+    }
 
 
-       return flag;
-   }
+    private boolean isContain(DataPoint dp, List<DataPoint> dps) {
+        boolean flag = false;
+        String name = dp.getDataPointName().trim();
+        for (DataPoint tempDp : dps) {
+            String tempName = tempDp.getDataPointName().trim();
+            if (name.equals(tempName)) {
+                flag = true;
+                break;
+            }
+        }
 
-   public static void main(String[] args){
-       ArrayList<DataPoint> dpoints = new ArrayList<DataPoint>();
+        return flag;
+    }
+
+
+    private boolean mergeList(List<DataPoint> dps1, List<DataPoint> dps2) {
+        boolean flag = false;
+
+        if (dps1 == null || dps2 == null || dps1.size() == 0 || dps2.size() == 0) {
+            return flag;
+        }
+
+        for (DataPoint dp : dps2) {
+            if (dp.isKey() && isContain(dp, dps1)) {
+                flag = true;
+                break;
+            }
+        }
+
+        if (flag) {
+            for (DataPoint dp : dps2) {
+                if (!isContain(dp, dps1)) {
+                    DataPoint tempDp = new DataPoint(dp);
+                    dps1.add(tempDp);
+                }
+            }
+        }
+
+
+        return flag;
+    }
+
+    public static void main(String[] args) {
+        ArrayList<DataPoint> dpoints = new ArrayList<DataPoint>();
       /*
        double[] a={2,3};
        double[] b={2,4};
@@ -190,9 +190,9 @@ public class ClusterAnalysis {
        dpoints.add(new DataPoint(p,"p",false));
        dpoints.add(new DataPoint(q,"q",false));
 		*/
-       ClusterAnalysis ca=new ClusterAnalysis();
-       List<Cluster> clusterList=ca.doDbscanAnalysis(dpoints, 2, 4);
-       ca.displayCluster(clusterList);
+        ClusterAnalysis ca = new ClusterAnalysis();
+        List<Cluster> clusterList = ca.doDbscanAnalysis(dpoints, 2, 4);
+        ca.displayCluster(clusterList);
 
-   }
+    }
 }
